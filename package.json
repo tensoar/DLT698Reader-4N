@@ -1,0 +1,15 @@
+{
+  "name": "DLT698-4N",
+  "version": "0.0.1",
+  "description": "DLT698 protocol implement for node",
+  "main": "dist/index.js",
+  "author": "tensoar",
+  "license": "MIT",
+  "type": "module",
+  "dependencies": {
+    "@types/node": "^22.19.15"
+  },
+  "devDependencies": {
+    "typescript": "^6.0.3"
+  }
+}
