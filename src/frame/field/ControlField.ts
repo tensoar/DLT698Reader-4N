@@ -21,11 +21,10 @@ export default class ControlField implements IFragment{
         ctrl |= (isFragment & 1) << 5;         // bit5
         ctrl |= prm << 6;                     // bit6
         ctrl |= dir << 7;                     // bit7
-
         this.buf = Buffer.from([ctrl]);
     }
 
     frameBytes(): Buffer {
-        throw new Error("Method not implemented.");
+        return this.buf;
     }
 }
