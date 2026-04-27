@@ -19,3 +19,37 @@ export class PRM implements IBaseEnum<number> {
     static readonly SERVER_INITIATED = new PRM(0, "服务器发起");
     static readonly CLIENT_INITIATED = new PRM(1, "客户机发起");
 }
+
+export class AddressType implements IBaseEnum<number> {
+    private constructor(
+        public readonly value: number,
+        public readonly description: string
+    ) {}
+
+    static readonly SINGLE = new AddressType(0, "单地址");
+    static readonly WILDCARD = new AddressType(1, "通配地址");
+    static readonly GROUP = new AddressType(2, "组地址");
+    static readonly BROADCAST = new AddressType(3, "广播地址");
+}
+
+export class MessageRole implements IBaseEnum<number> {
+    private constructor(
+        public readonly value: number,
+        public readonly description: string
+    ) {}
+
+    static readonly CLIENT_RESPONSE = new MessageRole(0, "客户机对服务器上报的响应");
+    static readonly CLIENT_REQUEST = new MessageRole(1, "客户机发起的请求");
+    static readonly SERVER_REPORT = new MessageRole(2, "服务器发起的上报");
+    static readonly SERVER_RESPONSE = new MessageRole(3, "服务器对客户机请求的响应");
+}
+
+export class FunctionCode implements IBaseEnum<number> {
+    private constructor(
+        public readonly value: number,
+        public readonly description: string
+    ) {}
+
+    static readonly LINK_DATA = new FunctionCode(1, "链路数据");
+    static readonly USER_DATA = new FunctionCode(3, "用户数据");
+}
