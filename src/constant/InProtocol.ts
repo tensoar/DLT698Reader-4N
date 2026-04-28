@@ -53,3 +53,25 @@ export class FunctionCode implements IBaseEnum<number> {
     static readonly LINK_DATA = new FunctionCode(1, "链路数据");
     static readonly USER_DATA = new FunctionCode(3, "用户数据");
 }
+
+export class ClientAPDUType implements IBaseEnum<number> {
+    private constructor(
+        public readonly value: number,
+        public readonly description: string
+    ) {}
+
+    static readonly CONNECT_REQUEST = new ClientAPDUType(2, "建立应用连接请求");
+    static readonly RELEASE_REQUEST = new ClientAPDUType(3, "断开应用连接请求")
+    static readonly GET_REQUEST = new ClientAPDUType(5, "读取请求");
+}
+
+export class ServerAPDUType implements IBaseEnum<number> {
+    private constructor(
+        public readonly value: number,
+        public readonly description: string
+    ) {}
+
+    static readonly CONNECT_RESPONSE = new ServerAPDUType(2, "建立应用连接响应");
+    static readonly RELEASE_RESPONSE = new ServerAPDUType(3, "断开应用连接响应")
+    static readonly GET_RESPONSE = new ServerAPDUType(5, "读取响应");
+}
