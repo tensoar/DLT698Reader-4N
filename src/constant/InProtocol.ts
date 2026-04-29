@@ -75,3 +75,16 @@ export class ServerAPDUType implements IBaseEnum<number> {
     static readonly RELEASE_RESPONSE = new ServerAPDUType(3, "断开应用连接响应")
     static readonly GET_RESPONSE = new ServerAPDUType(5, "读取响应");
 }
+
+export class GetRequestType implements IBaseEnum<number> {
+    private constructor(
+        public readonly value: number,
+        public readonly description: string
+    ) {}
+
+    static readonly NORMAL = new GetRequestType(1, "请求读取一个对象属性");
+    static readonly NORMAL_LIST = new GetRequestType(2, "请求读取若干个对象属性");
+    static readonly RECORD = new GetRequestType(3, "请求读取一个记录型对象属性");
+    static readonly RECORD_LIST = new GetRequestType(4, "请求读取若干个记录型对象属性");
+    static readonly NEXT = new GetRequestType(5, "请求读取分帧传输的下一帧");
+}

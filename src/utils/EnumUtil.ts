@@ -1,7 +1,7 @@
 import type IBaseEnum from "../constant/IBaseEnum.js";
 import type { EnumValue } from "../types/index.js";
 
-export default class EnumUtils {
+export default class EnumUtil {
     static fromValue<E extends IBaseEnum<EnumValue>>(e: E, v: EnumValue) {
         const values = Object.values(e) as E[];
         for (const item of values) {

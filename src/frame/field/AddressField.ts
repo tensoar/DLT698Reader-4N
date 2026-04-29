@@ -10,7 +10,7 @@ export class AddressFeature implements IFragment {
         readonly logicalAddress: number,
         readonly addressBytesLength: number
     ) {
-        this.buf = Buffer.from([(addressType.value << 6) | (logicalAddress << 4) | (addressBytesLength)]);
+        this.buf = Buffer.from([(addressType.value << 6) | (logicalAddress << 4) | (addressBytesLength - 1)]);
     }
 
     frameBytes(): Buffer {
@@ -28,7 +28,7 @@ export default class AddressField implements IFragment {
         readonly clientAddress: number
     ) {
         this.feature = feature;
-        this.buf = Buffer.from([feature.frameBytes().at(0)!, ...addressBytes, clientAddress]);
+        this.buf = Buffer.from([feature.frameBytes().at(0)!, ...addressBytes.reverse(), clientAddress]);
         this.len = addressBytes.length + 1;
     }
 
@@ -42,5 +42,3 @@ export default class AddressField implements IFragment {
         return this.buf;
     }
 }
-
-console.log(AddressField.WILDCARD_ADDRESS.frameBytes().toString("hex"));
