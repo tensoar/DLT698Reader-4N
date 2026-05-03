@@ -14,7 +14,7 @@ export default class PIID implements IFragment{
         this.buf = ByteBuf.from([this.value])
     }
 
-    frameBuf(): ByteBuf {
+    get frameBuf(): ByteBuf {
         return this.buf;
     }
 

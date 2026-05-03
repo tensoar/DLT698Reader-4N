@@ -14,10 +14,10 @@ export default class GetRequestNormal implements IGetRequest {
         this.buf = ByteBuf.allocate(6)
         this.buf.writeUInt8(GetRequestType.NORMAL.value);
         this.buf.writeUInt8(piid.value);
-        this.buf.writeBytes(oad.frameBuf());
+        this.buf.writeBytes(oad.frameBuf);
     }
 
-    frameBuf(): ByteBuf {
+    get frameBuf(): ByteBuf {
         return this.buf;
     }
 

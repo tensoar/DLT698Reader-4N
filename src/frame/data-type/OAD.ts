@@ -16,7 +16,7 @@ export default class OAD implements IFragment{
         this.buf = ByteBuf.from(this.value);
     }
 
-    frameBuf(): ByteBuf {
+    get frameBuf(): ByteBuf {
         return this.buf;
     }
 

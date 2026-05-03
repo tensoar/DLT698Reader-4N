@@ -14,7 +14,7 @@ export class AddressFeature implements IFragment {
         this.buf = ByteBuf.of((addressType.value << 6) | (logicalAddress << 4) | (addressBytesLength - 1));
     }
 
-    frameBuf(): ByteBuf {
+    get frameBuf(): ByteBuf {
         return this.buf;
     }
 }
@@ -30,7 +30,7 @@ export default class AddressField implements IFragment {
     ) {
         this.feature = feature;
         this.buf = ByteBuf.allocate(addressBytes.length + 2)
-        this.buf.writeBytes(feature.frameBuf())
+        this.buf.writeBytes(feature.frameBuf)
         this.buf.writeBytes(addressBytes.reverse())
         this.buf.writeBytes([clientAddress])
         this.len = addressBytes.length + 1;
@@ -42,7 +42,7 @@ export default class AddressField implements IFragment {
         return new AddressField(new AddressFeature(addressType, logicAddress, addressBytes.length), addressBytes, clientAddress)
     }
 
-    frameBuf(): ByteBuf {
+    get frameBuf(): ByteBuf {
         return this.buf;
     }
 }

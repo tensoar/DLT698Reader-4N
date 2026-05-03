@@ -25,7 +25,7 @@ export default class ControlField implements IFragment{
         this.buf = ByteBuf.of(ctrl);
     }
 
-    frameBuf(): ByteBuf {
+    get frameBuf(): ByteBuf {
         return this.buf;
     }
 }
