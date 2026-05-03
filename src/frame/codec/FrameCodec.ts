@@ -7,42 +7,33 @@ import {AddressType, FunctionCode, MessageRole} from "../../constant/InProtocol.
 import GetRequestNormal from "../apdu/request/GetRequestNormal.js";
 import PIID from "../data-type/PIID.js";
 import OAD from "../data-type/OAD.js";
+import {ByteBuf} from "../../domain/ByteBuf.js";
 
 export default class FrameCodec {
     static buildRequestFrameBuf(controlField: ControlField, addressField: AddressField, apdu: IGetRequest) {
         // 前导 + 起始 + 长度域 + 控制域 + 地址域 + 帧头校验 + 读取标志 + apdu + timeFlag + 帧校验 + 结束
-        const bufLen = 4 + 1 + 2 + controlField.frameBytes().length
-            + addressField.frameBytes().length
+        const bufLen = 4 + 1 + 2 + controlField.frameBuf().wIndex
+            + addressField.frameBuf().wIndex
             + 2 + 1
-            + apdu.frameBytes().length
-            + 1 + 2 + 1;
-        const buf = Buffer.alloc(bufLen);
+            + apdu.frameBuf().wIndex
+            + 1 + 2;
+        const buf = ByteBuf.allocate(bufLen);
 
-        let offset = 0;
-        buf.writeUint8(0xFE, offset ++);
-        buf.writeUint8(0xFE, offset ++);
-        buf.writeUint8(0xFE, offset ++);
-        buf.writeUint8(0xFE, offset ++);
-        buf.writeUint8(0x68, offset ++);
-
+        buf.writeBytes([0xFE, 0xFE, 0xFE, 0xFE, 0x68]);
         // 长度域
-        buf.writeUint16LE(bufLen - 6, offset);
-        offset += 2;
-
-        offset += controlField.frameBytes().copy(buf, offset);
-        offset += addressField.frameBytes().copy(buf, offset);
+        buf.writeUInt16LE(bufLen - 6);
+        buf.writeBytes(controlField.frameBuf());
+        buf.writeBytes(addressField.frameBuf());
 
         // 帧头校验
-        buf.writeUint16LE(CRCUtil.crc16(buf, 5, buf.length - offset), offset)
-        offset += 2
+        buf.writeUInt16LE(CRCUtil.crc16(buf, 5));
 
-        buf.writeUint8(5, offset ++)
-        offset += apdu.frameBytes().copy(buf, offset);
-        buf.writeUint8(0, offset ++)
+        buf.writeUInt8(5)
+        buf.writeBytes(apdu.frameBuf());
+        buf.writeUInt8(0)
         // 帧校验
-        buf.writeUint16LE(CRCUtil.crc16(buf, 5, buf.length - offset), offset)
-        offset += 2
-        buf.writeUint8(0x16, offset ++)
+        buf.writeUInt16LE(CRCUtil.crc16(buf, 5))
+        buf.writeUInt8(0x16)
         return buf
     }
 }
@@ -50,4 +41,4 @@ export default class FrameCodec {
 const controlField = new ControlField(MessageRole.CLIENT_REQUEST, 0, 0, FunctionCode.USER_DATA);
 const addressField =AddressField.of(AddressType.SINGLE, 0, [0, 0, 0, 0, 0, 1], 0)
 const apdu = new GetRequestNormal(new PIID(0, 1), OAD.of(0, 0, 2, 0))
-console.log(FrameCodec.buildRequestFrameBuf(controlField, addressField, apdu).toString("hex"));
+console.log(FrameCodec.buildRequestFrameBuf(controlField, addressField, apdu).toReadableHexString());

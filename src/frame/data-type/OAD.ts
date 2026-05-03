@@ -1,9 +1,10 @@
 import type IFragment from "../IFragment.js";
 import {Buffer} from "node:buffer";
+import {ByteBuf} from "../../domain/ByteBuf.js";
 
 export default class OAD implements IFragment{
     readonly value: number[];
-    private readonly buf: Buffer;
+    private readonly buf: ByteBuf;
     constructor(
         readonly oi: number[],
         readonly property: number[],
@@ -12,10 +13,10 @@ export default class OAD implements IFragment{
             throw new Error(`Invalid value for OAD, oi and property must be byte array of length two.`);
         }
         this.value = [...oi, ...property];
-        this.buf = Buffer.from(this.value);
+        this.buf = ByteBuf.from(this.value);
     }
 
-    frameBytes(): Buffer {
+    frameBuf(): ByteBuf {
         return this.buf;
     }
 
@@ -24,7 +25,7 @@ export default class OAD implements IFragment{
             if (!target || target.length < 1) {
                 return false
             }
-            return this.buf.toString("hex") === target.toLowerCase();
+            return this.buf.toString('hex', true) === target.toLowerCase();
         } else {
             const tagetVale = target instanceof Array ? target : target.value;
             if (tagetVale.length != 4) {

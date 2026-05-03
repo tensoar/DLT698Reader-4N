@@ -1,3 +1,4 @@
+import {ByteBuf} from "../domain/ByteBuf.js";
 
 export default class CRCUtil {
     private static readonly CRC_TABLE = [
@@ -25,11 +26,11 @@ export default class CRCUtil {
 
     private static readonly CRC_INITIAL = 0xffff;
 
-    static crc16(data: number[] | Buffer, preSkipped: number = 0, tailSkipped: number = 0) {
+    static crc16(data: number[] | Buffer | ByteBuf, preSkipped: number = 0, tailSkipped: number = 0) {
         let crc = this.CRC_INITIAL;
         const len = data.length;
         for (let i = preSkipped; i < len - tailSkipped; i ++) {
-            const num = data[i]!;
+            const num = data instanceof ByteBuf ? data.at(i) : data[i]!;
             crc = (crc >>> 8) ^ this.CRC_TABLE[(crc ^ num) & 0xff]!;
         }
         return crc ^ 0xffff;

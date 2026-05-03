@@ -1,26 +1,27 @@
 import  { AddressType } from "../../constant/InProtocol.js";
 import type IFragment from "../IFragment.js";
 import {Buffer} from "node:buffer";
+import {ByteBuf} from "../../domain/ByteBuf.js";
 
 // 地址特征
 export class AddressFeature implements IFragment {
-    private readonly buf : Buffer;
+    private readonly buf : ByteBuf;
     constructor(
         readonly addressType: AddressType,
         readonly logicalAddress: number,
         readonly addressBytesLength: number
     ) {
-        this.buf = Buffer.from([(addressType.value << 6) | (logicalAddress << 4) | (addressBytesLength - 1)]);
+        this.buf = ByteBuf.of((addressType.value << 6) | (logicalAddress << 4) | (addressBytesLength - 1));
     }
 
-    frameBytes(): Buffer {
+    frameBuf(): ByteBuf {
         return this.buf;
     }
 }
 
 // 地址域
 export default class AddressField implements IFragment {
-    private readonly buf : Buffer;
+    private readonly buf : ByteBuf;
     readonly len: number;
     constructor(
         readonly feature : AddressFeature,
@@ -28,7 +29,10 @@ export default class AddressField implements IFragment {
         readonly clientAddress: number
     ) {
         this.feature = feature;
-        this.buf = Buffer.from([feature.frameBytes().at(0)!, ...addressBytes.reverse(), clientAddress]);
+        this.buf = ByteBuf.allocate(addressBytes.length + 2)
+        this.buf.writeBytes(feature.frameBuf())
+        this.buf.writeBytes(addressBytes.reverse())
+        this.buf.writeBytes([clientAddress])
         this.len = addressBytes.length + 1;
     }
 
@@ -38,7 +42,7 @@ export default class AddressField implements IFragment {
         return new AddressField(new AddressFeature(addressType, logicAddress, addressBytes.length), addressBytes, clientAddress)
     }
 
-    frameBytes(): Buffer {
+    frameBuf(): ByteBuf {
         return this.buf;
     }
 }

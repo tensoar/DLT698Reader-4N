@@ -1,24 +1,23 @@
 import type PIID from "../../data-type/PIID.js";
 import type {IGetRequest} from "./IGetRequest.js";
 import type OAD from "../../data-type/OAD.js";
-import {Buffer} from "node:buffer";
 import {GetRequestType} from "../../../constant/InProtocol.js";
+import {ByteBuf} from "../../../domain/ByteBuf.js";
 
 export default class GetRequestNormal implements IGetRequest {
     readonly piid: PIID;
     readonly oad: OAD;
-    private readonly buf: Buffer;
+    private readonly buf: ByteBuf;
     constructor(piid: PIID, oad: OAD) {
         this.piid = piid;
         this.oad = oad;
-        this.buf = Buffer.alloc(6)
-        let offset = 0;
-        this.buf.writeUint8(GetRequestType.NORMAL.value, offset ++);
-        this.buf.writeUint8(piid.value, offset ++);
-        oad.frameBytes().copy(this.buf, offset);
+        this.buf = ByteBuf.allocate(6)
+        this.buf.writeUInt8(GetRequestType.NORMAL.value);
+        this.buf.writeUInt8(piid.value);
+        this.buf.writeBytes(oad.frameBuf());
     }
 
-    frameBytes(): Buffer {
+    frameBuf(): ByteBuf {
         return this.buf;
     }
 

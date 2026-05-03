@@ -1,9 +1,10 @@
 import {FunctionCode, type MessageRole} from "../../constant/InProtocol.js";
 import type IFragment from "../IFragment.js";
 import {Buffer} from "node:buffer";
+import {ByteBuf} from "../../domain/ByteBuf.js";
 
 export default class ControlField implements IFragment{
-    readonly buf: Buffer;
+    readonly buf: ByteBuf;
     constructor(
         readonly messageRole: MessageRole,
         readonly isFragment: 0 | 1,
@@ -21,10 +22,10 @@ export default class ControlField implements IFragment{
         ctrl |= (isFragment & 1) << 5;         // bit5
         ctrl |= prm << 6;                     // bit6
         ctrl |= dir << 7;                     // bit7
-        this.buf = Buffer.from([ctrl]);
+        this.buf = ByteBuf.of(ctrl);
     }
 
-    frameBytes(): Buffer {
+    frameBuf(): ByteBuf {
         return this.buf;
     }
 }

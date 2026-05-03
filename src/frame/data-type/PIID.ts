@@ -1,20 +1,20 @@
+import {ByteBuf} from "../../domain/ByteBuf.js";
 import type IFragment from "../IFragment.js";
-import {Buffer} from "node:buffer";
 
 export default class PIID implements IFragment{
 
     readonly value: number;
-    private readonly buf: Buffer;
+    private readonly buf: ByteBuf;
     constructor(readonly priority: number, readonly index: number) {
         this.value = 0;
 
         this.value |= index & 0x3F;
         this.value |= (priority & 1) << 7;
 
-        this.buf = Buffer.from([this.value])
+        this.buf = ByteBuf.from([this.value])
     }
 
-    frameBytes(): Buffer {
+    frameBuf(): ByteBuf {
         return this.buf;
     }
 
