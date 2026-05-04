@@ -359,18 +359,18 @@ export class ByteBuf {
         for (let i = 0; i < len; i++) {
             const byte = buf.readUInt8(i);
             hex += (byte < 16 ? '0' : '') + byte.toString(16);
-            if (withSpace) {
-                if (i !== len - 1) hex += ' ';
+            if (withSpace && i !== len - 1) {
+                hex += ' ';
             }
         }
 
         return upperCase ? hex.toUpperCase() : hex;
     }
 
-    public toString(encoding: BufferEncoding = 'hex', ignoreRIndex: boolean = false): string {
+    public toString(encoding: BufferEncoding = 'hex', ignoreReadIndex: boolean = false): string {
         return this.buffer.toString(
             encoding,
-            ignoreRIndex ? 0 : this.readIndex,
+            ignoreReadIndex ? 0 : this.readIndex,
             this.writeIndex
         );
     }

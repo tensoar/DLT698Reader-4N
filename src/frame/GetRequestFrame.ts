@@ -9,18 +9,17 @@ import {AddressType, FunctionCode, MessageRole} from "../constant/InProtocol.js"
 import GetRequestNormalList from "./apdu/request/GetRequestNormalList.js";
 import PIID from "./data-type/PIID.js";
 import OAD from "./data-type/OAD.js";
-import FrameCodec from "./codec/FrameCodec.js";
 
-export default class GetRequestFrame implements IFragment{
+export default class GetRequestFrame<GetRequest extends IGetRequest> implements IFragment{
     readonly controlField: ControlField;
     readonly addressField: AddressField;
     readonly hcs: number;
-    readonly apdu: IGetRequest;
+    readonly apdu: GetRequest;
     readonly frameLen: number;
     readonly fcs: number;
     readonly isSecurity: boolean;
     private readonly buf: ByteBuf;
-    constructor(addressField: AddressField, controlField: ControlField, apdu: IGetRequest, isSecurity: boolean) {
+    constructor(addressField: AddressField, controlField: ControlField, apdu: GetRequest, isSecurity: boolean) {
         this.controlField = controlField;
         this.addressField = addressField;
         this.apdu = apdu;

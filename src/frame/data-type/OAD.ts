@@ -10,7 +10,7 @@ export default class OAD implements IFragment{
         readonly property: number[],
     ) {
         if (!oi || !property || oi.length != 2 || property.length !=2) {
-            throw new Error(`Invalid value for OAD, oi and property must be byte array of length two.`);
+            throw new Error(`Invalid value for OAD, oi and property must be byte array of length 2.`);
         }
         this.value = [...oi, ...property];
         this.buf = ByteBuf.from(this.value);

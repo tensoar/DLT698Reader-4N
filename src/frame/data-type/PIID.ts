@@ -19,7 +19,7 @@ export default class PIID implements IFragment{
     }
 
 
-    static parse(piid: number) {
+    static of(piid: number) {
         return new PIID((piid >> 7) & 1, piid & 0x3F,)
     }
 
