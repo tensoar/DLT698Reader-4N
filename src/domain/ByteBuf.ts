@@ -113,6 +113,18 @@ export class ByteBuf {
         return val;
     }
 
+    public readInt64BE(): bigint {
+        const val = this.buffer.readBigInt64BE(this.readIndex);
+        this.readIndex += 8;
+        return val;
+    }
+
+    public readUInt64BE(): bigint {
+        const val = this.buffer.readBigUInt64BE(this.readIndex);
+        this.readIndex += 8;
+        return val;
+    }
+
     public readFloatBE(): number {
         const val = this.buffer.readFloatBE(this.readIndex);
         this.readIndex += 4;
@@ -141,6 +153,15 @@ export class ByteBuf {
         const slice = this.buffer.subarray(this.readIndex, this.readIndex + length);
         this.readIndex += length;
         return slice;
+    }
+
+    public readBytes(length: number): number[] {
+        const arr: number[] = [];
+        for (let i = 0; i < length; i++) {
+            arr.push(this.buffer.at(i)!);
+            this.readIndex += 1;
+        }
+        return arr;
     }
 
     public readString(length: number): string {
@@ -227,6 +248,18 @@ export class ByteBuf {
         this.ensureWritable(4);
         this.buffer.writeInt32LE(value, this.writeIndex);
         this.writeIndex += 4;
+    }
+
+    public writeInt64BE(value: bigint) {
+        this.ensureWritable(8);
+        this.buffer.writeBigInt64BE(value, this.writeIndex);
+        this.writeIndex += 8;
+    }
+
+    public writeUInt64BE(value: bigint) {
+        this.ensureWritable(8);
+        this.buffer.writeBigUInt64BE(value, this.writeIndex);
+        this.writeIndex += 8;
     }
 
     public writeFloatBE(value: number) {

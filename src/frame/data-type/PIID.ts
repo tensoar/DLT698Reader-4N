@@ -20,7 +20,11 @@ export default class PIID implements IFragment{
 
 
     static of(piid: number) {
-        return new PIID((piid >> 7) & 1, piid & 0x3F,)
+        return new PIID((piid >> 7) & 1, piid & 0x3F);
+    }
+
+    static parse(buf: ByteBuf) {
+        return this.of(buf.readUInt8());
     }
 
     static readonly DEFAULT = new PIID(0, 0);

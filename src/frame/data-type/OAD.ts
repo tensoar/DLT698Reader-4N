@@ -2,7 +2,7 @@ import type IFragment from "../IFragment.js";
 import {Buffer} from "node:buffer";
 import {ByteBuf} from "../../domain/ByteBuf.js";
 
-export default class OAD implements IFragment{
+export default class OAD implements IFragment {
     readonly value: number[];
     private readonly buf: ByteBuf;
     constructor(
@@ -42,6 +42,10 @@ export default class OAD implements IFragment{
 
     static of(b3: number, b2: number, b1: number, b0: number) {
         return new OAD([b3, b2], [b1, b0]);
+    }
+
+    static parse(buf: ByteBuf) {
+        return this.of(buf.readUInt8(), buf.readUInt8(), buf.readUInt8(), buf.readUInt8());
     }
 
     // 基本参数
