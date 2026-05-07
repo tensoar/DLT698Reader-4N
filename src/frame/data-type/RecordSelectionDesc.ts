@@ -15,8 +15,8 @@ export class RecordSelectorOfValue implements IRecordSelector {
         this.oad = oad;
         this.value = value;
         this.buf = ByteBuf.allocate(oad.frameBuf.wIndex + value.frameBuf.wIndex)
-        this.buf.writeBytes(oad.frameBuf)
-        this.buf.writeBytes(value.frameBuf)
+        this.buf.writeBytesBE(oad.frameBuf)
+        this.buf.writeBytesBE(value.frameBuf)
     }
 
     get frameBuf(): ByteBuf {
@@ -54,7 +54,7 @@ export default class RecordSelectionDesc<Selector extends IRecordSelector> imple
         this.selector = selector;
         this.buf = ByteBuf.allocate(1 + selector.frameBuf.wIndex);
         this.buf.writeUInt8(type);
-        this.buf.writeBytes(selector.frameBuf);
+        this.buf.writeBytesBE(selector.frameBuf);
     }
 
     get frameBuf(): ByteBuf {

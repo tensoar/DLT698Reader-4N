@@ -9,7 +9,7 @@ export default class VisibleString implements IBaseDataType {
         if (len < 1) {
             return;
         }
-        this.value = byteBuf.readAscii(len);
+        this.value = byteBuf.readAsciiBE(len);
     }
 
 }

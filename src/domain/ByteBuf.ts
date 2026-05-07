@@ -149,13 +149,13 @@ export class ByteBuf {
         return val;
     }
 
-    public readBuffer(length: number): Buffer {
+    public readBufferBE(length: number): Buffer {
         const slice = this.buffer.subarray(this.readIndex, this.readIndex + length);
         this.readIndex += length;
         return slice;
     }
 
-    public readBytes(length: number): number[] {
+    public readBytesBE(length: number): number[] {
         const arr: number[] = [];
         for (let i = 0; i < length; i++) {
             arr.push(this.buffer.at(i)!);
@@ -164,19 +164,28 @@ export class ByteBuf {
         return arr;
     }
 
-    public readString(length: number): string {
+    public readBytesLE(length: number): number[] {
+        const arr: number[] = [];
+        for (let i = length - 1; i >= 0; i--) {
+            arr.push(this.buffer.at(i)!);
+            this.readIndex += 1;
+        }
+        return arr;
+    }
+
+    public readStringBE(length: number): string {
         const str = this.buffer.toString('utf8', this.readIndex, this.readIndex + length);
         this.readIndex += length;
         return str;
     }
 
-    public readAscii(length: number): string {
+    public readAsciiBE(length: number): string {
         const str = this.buffer.toString('ascii', this.readIndex, this.readIndex + length);
         this.readIndex += length;
         return str;
     }
 
-    public readHex(length: number): string {
+    public readHexBE(length: number): string {
         const str = this.buffer.toString('hex', this.readIndex, this.readIndex + length).toUpperCase();
         this.readIndex += length;
         return str;
@@ -292,7 +301,7 @@ export class ByteBuf {
         this.writeIndex += src.length;
     }
 
-    public writeBytes(src: ByteBuf | number[]): void {
+    public writeBytesBE(src: ByteBuf | number[]): void {
         if (Array.isArray(src)) {
             // 处理 number[]
             const len = src.length;
@@ -310,25 +319,25 @@ export class ByteBuf {
         }
     }
 
-    public writeString(str: string): number {
+    public writeStringBE(str: string): number {
         const bytes = Buffer.from(str, 'utf8');
         this.writeBuffer(bytes);
         return bytes.length;
     }
 
-    public writeAscii(str: string): number {
+    public writeAsciiBE(str: string): number {
         const bytes = Buffer.from(str, 'ascii');
         this.writeBuffer(bytes);
         return bytes.length;
     }
 
-    public writeHex(hexStr: string): number {
+    public writeHexBE(hexStr: string): number {
         const bytes = Buffer.from(hexStr.replace(/\s+/g, ''), 'hex');
         this.writeBuffer(bytes);
         return bytes.length;
     }
 
-    public writeFixedString(str: string, fixedLength: number, encoding: BufferEncoding = 'utf8') {
+    public writeFixedStringBE(str: string, fixedLength: number, encoding: BufferEncoding = 'utf8') {
         this.ensureWritable(fixedLength);
         const bytes = Buffer.alloc(fixedLength);
         const src = Buffer.from(str, encoding);

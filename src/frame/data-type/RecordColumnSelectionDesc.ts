@@ -10,7 +10,7 @@ export default class RecordColumnSelectionDesc implements IFragment {
         this.buf.writeUInt8(relatedColumOadList.length);
         for (const related of relatedColumOadList) {
             this.buf.writeUInt8(0);
-            this.buf.writeBytes(related.frameBuf);
+            this.buf.writeBytesBE(related.frameBuf);
         }
     }
 

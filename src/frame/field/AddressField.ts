@@ -1,6 +1,5 @@
 import  { AddressType } from "../../constant/InProtocol.js";
 import type IFragment from "../IFragment.js";
-import {Buffer} from "node:buffer";
 import {ByteBuf} from "../../domain/ByteBuf.js";
 
 // 地址特征
@@ -30,9 +29,9 @@ export default class AddressField implements IFragment {
     ) {
         this.feature = feature;
         this.buf = ByteBuf.allocate(addressBytes.length + 2)
-        this.buf.writeBytes(feature.frameBuf)
-        this.buf.writeBytes(addressBytes.reverse())
-        this.buf.writeBytes([clientAddress])
+        this.buf.writeBytesBE(feature.frameBuf)
+        this.buf.writeBytesBE(addressBytes.reverse())
+        this.buf.writeBytesBE([clientAddress])
         this.len = addressBytes.length + 1;
     }
 

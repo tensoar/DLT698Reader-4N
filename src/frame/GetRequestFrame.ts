@@ -37,12 +37,12 @@ export default class GetRequestFrame<GetRequest extends IGetRequest> implements 
             + 1 + 2 + 1 + (isSecurity ? (apdu.frameBuf.wIndex < 0x80 ? 21 : 23) : 0);
         const buf = ByteBuf.allocate(bufLen);
 
-        buf.writeBytes([0xFE, 0xFE, 0xFE, 0xFE, 0x68]);
+        buf.writeBytesBE([0xFE, 0xFE, 0xFE, 0xFE, 0x68]);
         // 长度域
         this.frameLen = bufLen - 6;
         buf.writeUInt16LE(this.frameLen);
-        buf.writeBytes(controlField.frameBuf);
-        buf.writeBytes(addressField.frameBuf);
+        buf.writeBytesBE(controlField.frameBuf);
+        buf.writeBytesBE(addressField.frameBuf);
 
         // 帧头校验
         this.hcs = CRCUtil.crc16(buf, 5)
@@ -62,7 +62,7 @@ export default class GetRequestFrame<GetRequest extends IGetRequest> implements 
         }
 
         buf.writeUInt8(5);
-        buf.writeBytes(apdu.frameBuf);
+        buf.writeBytesBE(apdu.frameBuf);
 
         // TODO 时间标签
         buf.writeUInt8(0);
@@ -70,7 +70,7 @@ export default class GetRequestFrame<GetRequest extends IGetRequest> implements 
         if (isSecurity) {
             buf.writeUInt8(0x01);
             buf.writeUInt8(0x10);
-            buf.writeBytes(RandomUtil.randomSN(0x10));
+            buf.writeBytesBE(RandomUtil.randomSN(0x10));
         }
 
         // 帧校验

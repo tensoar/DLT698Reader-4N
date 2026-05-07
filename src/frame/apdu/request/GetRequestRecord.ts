@@ -14,8 +14,8 @@ export default class GetRequestRecord implements IFragment {
     constructor(readonly piid: PIID, readonly getRecord: GetRecord) {
         this.buf = ByteBuf.allocate(2 + getRecord.frameBuf.wIndex);
         this.buf.writeUInt8(GetRequestType.RECORD.value);
-        this.buf.writeBytes(piid.frameBuf)
-        this.buf.writeBytes(getRecord.frameBuf);
+        this.buf.writeBytesBE(piid.frameBuf)
+        this.buf.writeBytesBE(getRecord.frameBuf);
     }
 
     get frameBuf(): ByteBuf {

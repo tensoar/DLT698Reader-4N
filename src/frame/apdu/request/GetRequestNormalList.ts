@@ -17,7 +17,7 @@ export default class GetRequestNormalList implements IFragment {
         this.buf.writeUInt8(GetRequestType.NORMAL_LIST.value)
         this.buf.writeUInt8(piid.value);
         this.buf.writeUInt8(oadList.length);
-        oadList.forEach(oda => this.buf.writeBytes(oda.frameBuf))
+        oadList.forEach(oda => this.buf.writeBytesBE(oda.frameBuf))
     }
 
     get frameBuf(): ByteBuf {

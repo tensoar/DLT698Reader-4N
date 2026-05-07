@@ -8,9 +8,9 @@ export default class GetRecord implements IFragment {
     private readonly buf: ByteBuf;
     constructor(readonly oad: OAD, readonly rsd: RecordSelectionDesc<IRecordSelector>, readonly rcsd: RecordColumnSelectionDesc) {
         this.buf = ByteBuf.allocate(4 + rsd.frameBuf.wIndex + rcsd.frameBuf.wIndex);
-        this.buf.writeBytes(oad.frameBuf);
-        this.buf.writeBytes(rsd.frameBuf);
-        this.buf.writeBytes(rcsd.frameBuf);
+        this.buf.writeBytesBE(oad.frameBuf);
+        this.buf.writeBytesBE(rsd.frameBuf);
+        this.buf.writeBytesBE(rcsd.frameBuf);
     }
     get frameBuf(): ByteBuf {
         return this.buf;

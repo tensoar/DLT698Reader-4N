@@ -8,7 +8,7 @@ export default class BitString implements IBaseDataType {
     parse(byteBuf: ByteBuf): void {
         this.bitLen = byteBuf.readUInt8();
         const byteLen = Math.ceil(this.bitLen / 8);
-        this.value = byteBuf.readBytes(byteLen);
+        this.value = byteBuf.readBytesBE(byteLen);
     }
 
 }

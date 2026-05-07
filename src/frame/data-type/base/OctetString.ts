@@ -9,7 +9,7 @@ export default class OctetString implements IBaseDataType {
         if (len < 1) {
             return;
         }
-        this.value = byteBuf.readHex(len);
+        this.value = byteBuf.readHexBE(len);
     }
 
 }

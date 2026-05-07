@@ -9,7 +9,7 @@ export default class UTF8String implements IBaseDataType {
         if (len < 1) {
             return;
         }
-        this.value = byteBuf.readBuffer(len).toString("utf-8");
+        this.value = byteBuf.readBufferBE(len).toString("utf-8");
     }
 
 }

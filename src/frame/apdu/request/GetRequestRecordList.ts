@@ -10,10 +10,10 @@ export default class GetRequestRecordList implements IFragment {
     constructor(readonly piid: PIID, getRecordList: GetRecord[]) {
         this.buf = ByteBuf.allocate(3 + getRecordList.reduce((sum, item) => sum + item.frameBuf.wIndex, 0));
         this.buf.writeUInt8(GetRequestType.RECORD_LIST.value);
-        this.buf.writeBytes(piid.frameBuf);
+        this.buf.writeBytesBE(piid.frameBuf);
         this.buf.writeUInt8(getRecordList.length);
         for (const getRecord of getRecordList) {
-            this.buf.writeBytes(getRecord.frameBuf);
+            this.buf.writeBytesBE(getRecord.frameBuf);
         }
     }
 
