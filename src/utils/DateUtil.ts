@@ -1,5 +1,4 @@
-import {Endian} from "../constant/InProject.js";
-import {ByteBuf} from "../domain/ByteBuf.js";
+import StrUtil from "./StrUtil.js";
 
 export enum TimeUnit {
     YEAR,
@@ -178,12 +177,6 @@ export default class DateUtil {
         return newDate;
     }
 
-    static date2BCDArray(date: Date, endian: Endian, withWeek = false) {
-        let formatStr = withWeek ? this.date2Format(date, 'yyyyLLddeeHHmmss') : this.date2Format(date, 'yyyyLLddHHmmss');
-        const bcdBuf = ByteBuf.from(formatStr.substring(withWeek ? 14 : 12));
-        return endian === Endian.LE ? bcdBuf.readBytesLE(bcdBuf.wIndex) : bcdBuf.readBytesBE(bcdBuf.wIndex);
-    }
-
     static startOfDay(date: Date) {
         return new Date(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0, 0);
     }
@@ -258,16 +251,98 @@ export default class DateUtil {
         return toNextHour ? this.plus(freezeDate, 1, TimeUnit.HOUR) : freezeDate;
     }
 
-    static date2BaseSchemeBytesBE(date: Date) {
+    static date2BcdBytesBE(date: Date, schema: 'DATE_TIME' | 'DATE'| 'TIME' | 'DATE_TIME_S') {
         const year = date.getFullYear();
-        return [
-            year & 0xFF,
-            year >> 8 & 0xFF,
-            (date.getMonth() + 1) & 0xFF,
-            date.getDate() & 0xFF,
-            date.getHours() & 0xFF,
-            date.getMinutes() & 0xFF,
-            date.getSeconds() & 0xFF,
-        ];
+        if (schema === 'DATE_TIME') {
+            const milliseconds = date.getMilliseconds();
+            return [
+               ( year >> 8) & 0xFF,
+                year & 0xFF,
+                (date.getMonth() + 1),
+                date.getDate(),
+                date.getDay(),
+                date.getHours(),
+                date.getMinutes(),
+                date.getSeconds(),
+                milliseconds >> 8 & 0xFF,
+                milliseconds & 0xFF,
+            ];
+        } else if (schema === 'DATE') {
+            return [
+                ( year >> 8) & 0xFF,
+                year & 0xFF,
+                (date.getMonth() + 1),
+                date.getDate(),
+                date.getDay(),
+            ];
+        } else if (schema === 'TIME') {
+            return [
+                date.getHours(),
+                date.getMinutes(),
+                date.getSeconds(),
+            ]
+        } else {
+            return [
+                (year >> 8) & 0xFF,
+                year & 0xFF,
+                (date.getMonth() + 1),
+                date.getDate(),
+                date.getHours(),
+                date.getMinutes(),
+                date.getSeconds(),
+            ]
+        }
+    }
+
+    static bcdBytes2DateBE(bytes: number[], schema: 'DATE_TIME' | 'DATE'| 'TIME' | 'DATE_TIME_S') {
+        if (schema === 'TIME' && bytes.includes(0xFF)) {
+            console.warn("Meaningless time format");
+            return null;
+        } else {
+            if (bytes[0] == 0xFF && bytes[1] == 0xFF) {
+                console.warn("Meaningless time format");
+                return null;
+            }
+            for (let i = 2; i < bytes.length; i++) {
+                if (bytes[i] == 0xFF) {
+                    console.warn("Meaningless time format");
+                    return null;
+                }
+            }
+        }
+        if (schema === 'DATE_TIME') {
+            const year = (bytes[0]! << 8) | bytes[1]!;
+            const mills = (bytes[8]! << 8) | bytes[9]!;
+            return new Date(year, bytes[2]! - 1, bytes[3], bytes[5]!, bytes[6], bytes[7]!, mills);
+        } else if (schema === 'DATE') {
+            const year = (bytes[0]! << 8) | bytes[1]!;
+            return new Date(year, bytes[2]! - 1, bytes[3]);
+        } else if (schema === 'TIME') {
+            const now = DateUtil.now();
+            return new Date(now.getFullYear(), now.getMonth(), now.getDate(), bytes[0], bytes[1], bytes[2]);
+        } else {
+            const year = (bytes[0]! << 8) | bytes[1]!;
+            return new Date(year, bytes[2]! - 1, bytes[3], bytes[4], bytes[5], bytes[6]);
+        }
+    }
+
+    static bcdBytes2DateStrBE(bytes: number[], schema: 'DATE_TIME' | 'DATE'| 'TIME' | 'DATE_TIME_S') {
+        if (schema === 'DATE_TIME') {
+            const year = (bytes[0]! << 8) | bytes[1]!;
+            const mills = (bytes[8]! << 8) | bytes[9]!;
+            return `${year}-${StrUtil.padStart(bytes[2]! - 1, 2, '0')}-${StrUtil.padStart(bytes[3]!, 2, '0')}`
+                + ` ${StrUtil.padStart(bytes[5]!, 2, '0')}:${StrUtil.padStart(bytes[6]!, 2, '0')}:${StrUtil.padStart(bytes[7]!, 2, '0')}`
+                + `.${mills}`
+                + ` Week ${bytes[4]}`
+        } else if (schema === 'DATE') {
+            const year = (bytes[0]! << 8) | bytes[1]!;
+            return `${year}-${StrUtil.padStart(bytes[2]! - 1, 2, '0')}-${StrUtil.padStart(bytes[3]!, 2, '0')}`
+        } else if (schema === 'TIME') {
+            return `${StrUtil.padStart(bytes[0]!, 2, '0')}:${StrUtil.padStart(bytes[1]!, 2, '0')}:${StrUtil.padStart(bytes[2]!, 2, '0')}`
+        } else {
+            const year = (bytes[0]! << 8) | bytes[1]!;
+            return `${year}-${StrUtil.padStart(bytes[2]! - 1, 2, '0')}-${StrUtil.padStart(bytes[3]!, 2, '0')} ${StrUtil.padStart(bytes[4]!, 2, '0')}:${StrUtil.padStart(bytes[5]!, 2, '0')}:${StrUtil.padStart(bytes[6]!, 2, '0')}`
+
+        }
     }
 }
