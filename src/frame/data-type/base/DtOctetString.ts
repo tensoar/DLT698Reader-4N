@@ -1,7 +1,7 @@
 import type { ByteBuf } from "../../../domain/ByteBuf.js";
 import type {IBaseDataType} from "./IBaseDataType.js";
 
-export default class OctetString implements IBaseDataType {
+export default class DtOctetString implements IBaseDataType<string> {
     readonly mark: number = 8;
     value: string = "";
     parse(byteBuf: ByteBuf): void {

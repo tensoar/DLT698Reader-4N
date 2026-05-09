@@ -1,7 +1,7 @@
 import type { ByteBuf } from "../../../domain/ByteBuf.js";
 import type {IBaseDataType} from "./IBaseDataType.js";
 
-export default class VisibleString implements IBaseDataType {
+export default class DtVisibleString implements IBaseDataType<string> {
     readonly mark: number = 10;
     value: string = "";
     parse(byteBuf: ByteBuf): void {

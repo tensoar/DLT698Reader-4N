@@ -2,7 +2,7 @@ import type { ByteBuf } from "../../../domain/ByteBuf.js";
 import type {IBaseDataType} from "./IBaseDataType.js";
 import BaseTypeHelper from "../helper/BaseTypeHelper.js";
 
-export default class ArraySeq<T extends IBaseDataType> implements IBaseDataType {
+export default class DtArray<T extends IBaseDataType<any>> implements IBaseDataType<T[]> {
     readonly mark = 1;
     readonly value: T[] = [];
 

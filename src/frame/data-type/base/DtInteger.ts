@@ -1,11 +1,10 @@
 import type { ByteBuf } from "../../../domain/ByteBuf.js";
 import type {IBaseDataType} from "./IBaseDataType.js";
 
-export default class Float32 implements IBaseDataType {
-    readonly mark: number = 23;
+export default class DtInteger implements IBaseDataType<number> {
+    readonly mark: number = 15;
     value: number = 0;
     parse(byteBuf: ByteBuf): void {
-        this.value = byteBuf.readFloatBE();
+        this.value = byteBuf.readInt8();
     }
-
 }
