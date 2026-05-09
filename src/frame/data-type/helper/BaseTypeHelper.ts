@@ -20,59 +20,44 @@ import DtLong64Unsigned from "../base/DtLong64Unsigned.js";
 import DtEnum from "../base/DtEnum.js";
 import DtFloat32 from "../base/DtFloat32.js";
 import DtFloat64 from "../base/DtFloat64.js";
-import DtDateTime from "../base/DtDateTime.js";
-import DtDate from "../base/DtDate.js";
-import DtTime from "../base/DtTime.js";
-import DtDateTimeS from "../base/DtDateTimeS.js";
-
-export const Type_Mapper = {
-    0: DtNull,
-    1: DtArray,
-    2: DtStruct,
-    3: DtBool,
-    4: DtBitString,
-    5: DtDoubleLong,
-    6: DtDoubleLongUnsigned,
-    9: DtOctetString,
-    10: DtVisibleString,
-    12: DtUTF8String,
-    15: DtInteger,
-    16: DtLong,
-    17: DtUnsigned,
-    18: DtLongUnsigned,
-    20: DtLong64,
-    21: DtLong64Unsigned,
-    22: DtEnum,
-    23: DtFloat32,
-    24: DtFloat64,
-    25: DtDateTime,
-    26: DtDate,
-    27: DtTime,
-    28: DtDateTimeS,
-}
-
-type TypeMark = keyof typeof Type_Mapper
-
-const TYPE_MARK_LIST = Object.keys(Type_Mapper).map(k => parseInt(k));
 
 export default class BaseTypeHelper {
 
+
     static decodeOneType<T extends IBaseDataType<any>>(buf: ByteBuf): T {
         const type = buf.readUInt8();
-        if(!TYPE_MARK_LIST.includes(type)) {
-            throw new TypeError(`Invalid base type mark: ${type}`);
-        }
-        const matchedType = this.matchedType(type as TypeMark);
+        const matchedType = this.matchedType(type);
         const typeObj = new matchedType();
         typeObj.parse(buf);
         return typeObj as T;
     }
 
-    static matchedType(mark: TypeMark) {
-        return Type_Mapper[mark]
+    static matchedType(mark: number): Class<IBaseDataType<any>> {
+        switch (mark) {
+            case 0: return DtNull;
+            case 1: return DtArray;
+            case 2: return DtStruct;
+            case 3: return DtBool;
+            case 4: return DtBitString;
+            case 5: return DtDoubleLong;
+            case 6: return DtDoubleLongUnsigned;
+            case 9: return DtOctetString;
+            case 10: return DtVisibleString;
+            case 12: return DtUTF8String;
+            case 15: return DtInteger;
+            case 16: return DtLong;
+            case 17: return DtUnsigned;
+            case 18: return DtLongUnsigned;
+            case 20: return DtLong64;
+            case 21: return DtLong64Unsigned;
+            case 22: return DtEnum;
+            case 23: return DtFloat32;
+            case 24: return DtFloat64;
+            default: throw new TypeError("Unknown type: " + mark);
+        }
     }
 }
 
 // const buf = ByteBuf.from([0x01, 0x02, 0x05, 0x01, 0x02, 0x00, 0x00, 0x03, 0x01, 0x00, 0x00])
-// const result = BaseTypeHelper.decodeOneType(buf),
-// console.log(result),
+// const result = BaseTypeHelper.decodeOneType(buf);
+// console.log(result);
