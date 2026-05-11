@@ -16,6 +16,10 @@ export class AddressFeature implements IFragment {
     get frameBuf(): ByteBuf {
         return this.buf;
     }
+
+    static parse(buf: ByteBuf) {
+
+    }
 }
 
 // 地址域

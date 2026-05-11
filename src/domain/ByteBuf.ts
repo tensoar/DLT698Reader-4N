@@ -157,8 +157,9 @@ export class ByteBuf {
 
     public readBytesBE(length: number): number[] {
         const arr: number[] = [];
+        const index = this.readIndex;
         for (let i = 0; i < length; i++) {
-            arr.push(this.buffer.at(i)!);
+            arr.push(this.buffer.at(index + i)!);
             this.readIndex += 1;
         }
         return arr;
@@ -166,8 +167,9 @@ export class ByteBuf {
 
     public readBytesLE(length: number): number[] {
         const arr: number[] = [];
+        const index = this.readIndex;
         for (let i = length - 1; i >= 0; i--) {
-            arr.push(this.buffer.at(i)!);
+            arr.push(this.buffer.at(index + i)!);
             this.readIndex += 1;
         }
         return arr;

@@ -88,3 +88,75 @@ export class GetRequestType implements IBaseEnum<number> {
     static readonly RECORD_LIST = new GetRequestType(4, "请求读取若干个记录型对象属性");
     static readonly NEXT = new GetRequestType(5, "请求读取分帧传输的下一帧");
 }
+
+export class GetResponseType implements IBaseEnum<number> {
+    private constructor(
+        public readonly value: number,
+        public readonly description: string
+    ) {}
+
+    static readonly GET_RESPONSE_NORMAL = new GetResponseType(1, "读取一个对象属性的响应");
+    static readonly GET_RESPONSE_NORMAL_LIST = new GetResponseType(2, "读取若干个对象属性的响应");
+    static readonly GET_RESPONSE_RECORD = new GetResponseType(3, "读取一个记录型对象属性的响应");
+    static readonly GET_RESPONSE_RECORD_LIST = new GetResponseType(4, "读取若干个记录型对象属性的响应");
+    static readonly GET_RESPONSE_NEXT = new GetResponseType(5, "读取分帧传输的下一帧的响应");
+}
+
+export class FrameCheckResult implements IBaseEnum<number> {
+    private constructor(
+        public readonly value: number,
+        public readonly description: string
+    ) {}
+
+    static readonly OK = new FrameCheckResult(0, "ok");
+    static readonly HEADER_CRC_ERROR = new FrameCheckResult(1, "帧头校验错误");
+    static readonly FRAME_CRC_ERROR = new FrameCheckResult(2, "帧校验错误");
+    static readonly FRAME_LENGTH_ERROR = new FrameCheckResult(3, "帧长度错误");
+    static readonly START_MARK_ERROR = new FrameCheckResult(4, "起始符错误");
+    static readonly END_MARK_ERROR = new FrameCheckResult(5, "结束符错误");
+}
+
+// export class DataAccessResult implements IBaseEnum<number> {
+//     private constructor(
+//         public readonly value: number,
+//         public readonly description: string
+//     ) {}
+
+//     static readonly SUCCESS = new DataAccessResult(0, "成功");
+//     static readonly HARDWARE_INVALID = new DataAccessResult(1, "硬件失效");
+//     static readonly TEMP_INVALID = new DataAccessResult(2, "暂时失效");
+//     static readonly REFUSAL_READ_WRITE = new DataAccessResult(2, "拒绝读写");
+//     static readonly OBJECT_UNDEFINED = new DataAccessResult(2, "对象未定义");
+//     static readonly OBJECT_INTERFACE_NOT_CONFIRM = new DataAccessResult(2, "暂时失效");
+//     static readonly OBJECT_NOT_EXIST = new DataAccessResult(2, "暂时失效");
+//     static readonly TYPE_NOT_MATTER = new DataAccessResult(2, "暂时失效");
+//     static readonly OUT_RANGE = new DataAccessResult(2, "暂时失效");
+//     static readonly DATA_BLOCK_UNAVAILABLE = new DataAccessResult(2, "暂时失效");
+//     static readonly FRAMING_TRANS_CANCELLED = new DataAccessResult(2, "暂时失效");
+//     static readonly NOT_IN_FRAME_TRANS_STATE = new DataAccessResult(2, "暂时失效");
+//     static readonly BLOCK_WRITE_CANCELLED = new DataAccessResult(2, "暂时失效");
+//     static readonly BLOCK_WRITE_STATE_NOT_EXIST = new DataAccessResult(2, "暂时失效");
+//     static readonly BOCCK_NO_INVALID = new DataAccessResult(2, "暂时失效");
+//     static readonly UNAUTHORIZED = new DataAccessResult(2, "暂时失效");
+//     static readonly COMMUNICATION_RATE_NOT_BE_CHANGED = new DataAccessResult(2, "暂时失效");
+//     static readonly YEAR_TIME_OUT_RANGE = new DataAccessResult(2, "暂时失效");
+//     static readonly DAY_TIME_OUT_RANGE = new DataAccessResult(2, "暂时失效");
+//     static readonly FEE_RATE_EXCEEDS = new DataAccessResult(2, "暂时失效");
+//     static readonly SECURITY_AUTH_MISMATCH = new DataAccessResult(2, "暂时失效");
+//     static readonly DUPLICATE_TOP_UP = new DataAccessResult(2, "暂时失效");
+//     static readonly EASM_VERIFICATION_FAILED = new DataAccessResult(2, "暂时失效");
+//     static readonly SECURITY_VERIFICATION_FAILED = new DataAccessResult(2, "暂时失效");
+//     static readonly CLIENT_NO_MISMATCH = new DataAccessResult(2, "暂时失效");
+//     static readonly TOP_UP_NUMBER_ERROR = new DataAccessResult(2, "暂时失效");
+//     static readonly ELECTRICITY_OVER_HOARDING = new DataAccessResult(2, "暂时失效");
+//     static readonly SYMMETRIC_DESCRYPTION_ERROR = new DataAccessResult(2, "暂时失效");
+//     static readonly ASYMMETRIC_DESCRYPTION_ERROR = new DataAccessResult(2, "暂时失效");
+//     static readonly SIGNATURE_ERROR = new DataAccessResult(2, "暂时失效");
+
+//     static readonly METER_HANG_UP = new DataAccessResult(2, "暂时失效");
+//     static readonly TIME_TAG_INVALID = new DataAccessResult(2, "暂时失效");
+//     static readonly REQUEST_TIMEOUT = new DataAccessResult(2, "暂时失效");
+//     static readonly ESAM_P_INACCURATE = new DataAccessResult(2, "暂时失效");
+//     static readonly ESAM_LC_ERROR = new DataAccessResult(2, "暂时失效");
+
+// }
