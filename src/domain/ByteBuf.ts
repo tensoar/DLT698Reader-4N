@@ -193,6 +193,15 @@ export class ByteBuf {
         return str;
     }
 
+    public readHexLE(length: number): string {
+        const bytes = this.buffer.subarray(this.readIndex, this.readIndex + length);
+        const reversed = Buffer.from([...bytes].reverse());
+        const str = reversed.toString('hex').toUpperCase();
+
+        this.readIndex += length;
+        return str;
+    }
+
     public skipBytes(length: number) {
         if (this.readIndex + length > this.writeIndex) {
             throw new RangeError(`skipBytes: Unable skip ${length} bytes, readable bytes length = ${this.readableBytes()}`);

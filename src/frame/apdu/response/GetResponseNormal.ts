@@ -1,22 +1,23 @@
 import type { ByteBuf } from "../../../domain/ByteBuf.js";
-import type AbsGetResponse from "./AbsGetResponse.js";
+import type PIID from "../../data-type/PIID.js";
+import type AddressField from "../../field/AddressField.js";
+import AbsGetResponse from "./AbsGetResponse.js";
+import FrameCodec from "../../codec/FrameCodec.js";
+import {FrameCheckResult} from "../../../constant/InProtocol.js";
 
 export default class GetResponseNormal extends AbsGetResponse {
+    piid: PIID | null = null;
+    addressField: AddressField | null = null;
     private readonly frameBuf: ByteBuf;
+    readonly frameCheckResult: FrameCheckResult;
 
     private constructor(frameBuf: ByteBuf) {
-        super();
+        super(frameBuf);
         this.frameBuf = frameBuf;
-
-        let b = frameBuf.readUInt8();
-        while (b == 0xfe) {
-            b = frameBuf.readUInt8();
+        this.frameCheckResult = FrameCodec.checkFrame(frameBuf);
+        if (this.frameCheckResult == FrameCheckResult.OK) {
+            this.consumePrefixBytes(frameBuf);
         }
-        if (b !== 0x68) {
-            console.error(`Invalid start mark: ${b}, expect 0x68`);
-            return;
-        }
-        
     }
 
     static parse(frameBuf: ByteBuf) {

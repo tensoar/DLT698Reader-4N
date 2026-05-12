@@ -1,6 +1,7 @@
 import  { AddressType } from "../../constant/InProtocol.js";
 import type IFragment from "../IFragment.js";
 import {ByteBuf} from "../../domain/ByteBuf.js";
+import EnumUtil from "../../utils/EnumUtil.js";
 
 // 地址特征
 export class AddressFeature implements IFragment {
@@ -18,7 +19,12 @@ export class AddressFeature implements IFragment {
     }
 
     static parse(buf: ByteBuf) {
-
+        const feature = buf.readUInt8();
+        const addressBytesLength = (feature & 0x0F) + 1;
+        const logicalAddress = (feature >> 4) & 0x03;
+        const addressTypeValue = (feature >> 6) & 0x03;
+        const addressType = EnumUtil.fromValue(AddressType, addressTypeValue);
+        return new AddressFeature(addressType, logicalAddress, addressBytesLength);
     }
 }
 
@@ -26,6 +32,7 @@ export class AddressFeature implements IFragment {
 export default class AddressField implements IFragment {
     private readonly buf : ByteBuf;
     readonly len: number;
+    readonly serverAddressStr: string;
     constructor(
         readonly feature : AddressFeature,
         readonly addressBytes : number[],
@@ -37,12 +44,20 @@ export default class AddressField implements IFragment {
         this.buf.writeBytesBE(addressBytes.reverse())
         this.buf.writeBytesBE([clientAddress])
         this.len = addressBytes.length + 1;
+        this.serverAddressStr = ByteBuf.from(addressBytes).readHexLE(addressBytes.length);
     }
 
     static readonly WILDCARD_ADDRESS = AddressField.of(AddressType.WILDCARD, 0, [0xaa, 0xaa, 0xaa, 0xaa, 0xaa, 0xaa], 0);
 
     static of(addressType: AddressType, logicAddress: number, addressBytes: number[], clientAddress: number): AddressField {
         return new AddressField(new AddressFeature(addressType, logicAddress, addressBytes.length), addressBytes, clientAddress)
+    }
+
+    static parse(buf: ByteBuf): AddressField {
+        const feature = AddressFeature.parse(buf);
+        const addressBytes = buf.readBytesBE(feature.addressBytesLength + 1);
+        const clientAddress = buf.readUInt8();
+        return new AddressField(feature, addressBytes, clientAddress);
     }
 
     get frameBuf(): ByteBuf {
