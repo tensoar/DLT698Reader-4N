@@ -116,6 +116,18 @@ export class FrameCheckResult implements IBaseEnum<number> {
     static readonly END_MARK_ERROR = new FrameCheckResult(5, "结束符错误");
 }
 
+export class FrameType implements IBaseEnum<number> {
+  private constructor(
+    public readonly value: number,
+    public readonly description: string
+  ) {}
+
+  static readonly START = new FrameType(0b00, "起始帧");
+  static readonly ACK = new FrameType(0b10, "确认帧");
+  static readonly END = new FrameType(0b01, "最后帧");
+  static readonly MID = new FrameType(0b11, "中间帧");
+}
+
 // export class DataAccessResult implements IBaseEnum<number> {
 //     private constructor(
 //         public readonly value: number,

@@ -374,8 +374,9 @@ export class ByteBuf {
         this.writeIndex = 0;
     }
 
-    public slice(): Buffer {
-        return this.buffer.subarray(0, this.writeIndex);
+    public slice(startIndex: number, endIndex: number): ByteBuf {
+        const buf = this.buffer.subarray(startIndex, endIndex);
+        return ByteBuf.wrap(buf);
     }
 
     public rawBuffer(): Buffer {
