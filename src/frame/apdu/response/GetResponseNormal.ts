@@ -1,30 +1,23 @@
 import type { ByteBuf } from "../../../domain/ByteBuf.js";
-import type PIID from "../../data-type/PIID.js";
+import PIID from "../../data-type/PIID.js";
 import type AddressField from "../../field/AddressField.js";
-import AbsGetResponse from "./AbsGetResponse.js";
+import type IGetResponse from "./IGetResponse.js";
 import FrameCodec from "../../codec/FrameCodec.js";
 import {FrameCheckResult} from "../../../constant/InProtocol.js";
+import AResultNormal from "./domain/AResultNormal.js";
+import type { IBaseDataType } from "../../data-type/base/IBaseDataType.js";
 
-export default class GetResponseNormal extends AbsGetResponse {
-    piid: PIID | null = null;
-    addressField: AddressField | null = null;
-    private readonly frameBuf: ByteBuf;
-    readonly frameCheckResult: FrameCheckResult;
-
-    private constructor(frameBuf: ByteBuf) {
-        super(frameBuf);
-        this.frameBuf = frameBuf;
-        this.frameCheckResult = FrameCodec.checkFrame(frameBuf);
-        if (this.frameCheckResult == FrameCheckResult.OK) {
-            this.consumePrefixBytes(frameBuf);
-        }
+export default class GetResponseNormal<T extends IBaseDataType<any>> implements IGetResponse {
+    private constructor(
+        readonly piid: PIID,
+        readonly result: AResultNormal<T>
+    ) {
     }
 
-    static parse(frameBuf: ByteBuf) {
-        return new GetResponseNormal(frameBuf);
+    static parse<T extends IBaseDataType<any>>(frameBuf: ByteBuf) {
+        const piid = PIID.parse(frameBuf);
+        const result = AResultNormal.parse(frameBuf);
+        return new GetResponseNormal(piid, result) as GetResponseNormal<T>;
     }
 
-    get fullFrameBuf() {
-        return this.frameBuf;
-    }
 }

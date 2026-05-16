@@ -20,6 +20,11 @@ import DtLong64Unsigned from "../base/DtLong64Unsigned.js";
 import DtEnum from "../base/DtEnum.js";
 import DtFloat32 from "../base/DtFloat32.js";
 import DtFloat64 from "../base/DtFloat64.js";
+import DtDateTime from "../base/DtDateTime.js";
+import DtDate from "../base/DtDate.js";
+import DtTime from "../base/DtTime.js";
+import OAD from "../base/OAD.js";
+import DtDateTimeS from "../base/DtDateTimeS.js";
 
 export default class BaseTypeHelper {
 
@@ -53,6 +58,11 @@ export default class BaseTypeHelper {
             case 22: return DtEnum;
             case 23: return DtFloat32;
             case 24: return DtFloat64;
+            case 25: return DtDateTime;
+            case 26: return DtDate;
+            case 27: return DtTime;
+            case 28: return DtDateTimeS;
+            case 81: return OAD;
             default: throw new TypeError("Unknown type: " + mark);
         }
     }

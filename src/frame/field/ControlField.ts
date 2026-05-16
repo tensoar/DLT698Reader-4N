@@ -7,7 +7,7 @@ export default class ControlField implements IFragment{
     readonly buf: ByteBuf;
     constructor(
         readonly messageRole: MessageRole,
-        readonly isFragment: 0 | 1,
+        readonly isFramed: 0 | 1,
         readonly sc: 0 | 1,
         readonly functionCode: FunctionCode,
     ) {
@@ -19,7 +19,7 @@ export default class ControlField implements IFragment{
         ctrl |= functionCode.value & 0b111;         // bit0~bit2
         ctrl |= (sc & 1) << 3;                 // bit3
         ctrl |= 0 << 4;                       // bit4 保留位固定0
-        ctrl |= (isFragment & 1) << 5;         // bit5
+        ctrl |= (isFramed & 1) << 5;         // bit5
         ctrl |= prm << 6;                     // bit6
         ctrl |= dir << 7;                     // bit7
         this.buf = ByteBuf.of(ctrl);

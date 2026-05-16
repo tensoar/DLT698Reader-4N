@@ -1,6 +1,6 @@
 import { ByteBuf } from "../../domain/ByteBuf.js";
 import type IFragment from "../IFragment.js";
-import OAD from "./OAD.js";
+import OAD from "./base/OAD.js";
 
 export default class RecordColumnSelectionDesc implements IFragment {
 
@@ -10,7 +10,7 @@ export default class RecordColumnSelectionDesc implements IFragment {
         this.buf.writeUInt8(relatedColumOadList.length);
         for (const related of relatedColumOadList) {
             this.buf.writeUInt8(0);
-            this.buf.writeBytesBE(related.frameBuf);
+            this.buf.writeBytesBE(related.frameBuf!);
         }
     }
 

@@ -1,6 +1,6 @@
 import type IFragment from "../IFragment.js";
 import {ByteBuf} from "../../domain/ByteBuf.js";
-import type OAD from "./OAD.js";
+import type OAD from "./base/OAD.js";
 import ValueError from "../../domain/error/ValueError.js";
 
 
@@ -14,9 +14,9 @@ export class RecordSelectorOfValue implements IRecordSelector {
     constructor(oad: OAD, value: IFragment) {
         this.oad = oad;
         this.value = value;
-        this.buf = ByteBuf.allocate(oad.frameBuf.wIndex + value.frameBuf.wIndex)
-        this.buf.writeBytesBE(oad.frameBuf)
-        this.buf.writeBytesBE(value.frameBuf)
+        this.buf = ByteBuf.allocate(oad.frameBuf!.wIndex + value.frameBuf!.wIndex)
+        this.buf.writeBytesBE(oad.frameBuf!)
+        this.buf.writeBytesBE(value.frameBuf!)
     }
 
     get frameBuf(): ByteBuf {
@@ -52,9 +52,9 @@ export default class RecordSelectionDesc<Selector extends IRecordSelector> imple
     private constructor(type: number, selector: Selector) {
         this.type = type;
         this.selector = selector;
-        this.buf = ByteBuf.allocate(1 + selector.frameBuf.wIndex);
+        this.buf = ByteBuf.allocate(1 + selector.frameBuf!.wIndex);
         this.buf.writeUInt8(type);
-        this.buf.writeBytesBE(selector.frameBuf);
+        this.buf.writeBytesBE(selector.frameBuf!);
     }
 
     get frameBuf(): ByteBuf {

@@ -1,4 +1,4 @@
-import type OAD from "../../data-type/OAD.js";
+import type OAD from "../../data-type/base/OAD.js";
 import type RecordSelectionDesc from "../../data-type/RecordSelectionDesc.js";
 import type { IRecordSelector } from "../../data-type/RecordSelectionDesc.js";
 import type RecordColumnSelectionDesc from "../../data-type/RecordColumnSelectionDesc.js";

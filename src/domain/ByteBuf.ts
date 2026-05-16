@@ -379,6 +379,14 @@ export class ByteBuf {
         return ByteBuf.wrap(buf);
     }
 
+    public sliceArray(startIndex: number, endIndex: number): number[] {
+        const arr: number[] = [];
+        for (let i = startIndex; i < endIndex; i ++) {
+            arr.push(this.buffer.at(i) as number);
+        }
+        return arr;
+    }
+
     public rawBuffer(): Buffer {
         return this.buffer;
     }

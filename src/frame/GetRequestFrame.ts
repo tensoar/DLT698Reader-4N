@@ -5,15 +5,6 @@ import type {IGetRequest} from "./apdu/request/IGetRequest.js";
 import {ByteBuf} from "../domain/ByteBuf.js";
 import CRCUtil from "../utils/CRCUtil.js";
 import RandomUtil from "../utils/RandomUtil.js";
-import {AddressType, FunctionCode, MessageRole} from "../constant/InProtocol.js";
-import GetRequestNormalList from "./apdu/request/GetRequestNormalList.js";
-import PIID from "./data-type/PIID.js";
-import OAD from "./data-type/OAD.js";
-import RecordSelectionDesc from "./data-type/RecordSelectionDesc.js";
-import RecordColumnSelectionDesc from "./data-type/RecordColumnSelectionDesc.js";
-import GetRequestRecord from "./apdu/request/GetRequestRecord.js";
-import GetRecord from "./apdu/request/GetRecord.js";
-import GetRequestRecordList from "./apdu/request/GetRequestRecordList.js";
 
 export default class GetRequestFrame<GetRequest extends IGetRequest> implements IFragment{
     readonly controlField: ControlField;
@@ -33,8 +24,8 @@ export default class GetRequestFrame<GetRequest extends IGetRequest> implements 
         const bufLen = 4 + 1 + 2 + controlField.frameBuf.wIndex
             + addressField.frameBuf.wIndex
             + 2 + 1
-            + apdu.frameBuf.wIndex
-            + 1 + 2 + 1 + (isSecurity ? (apdu.frameBuf.wIndex < 0x80 ? 21 : 23) : 0);
+            + apdu.frameBuf!.wIndex
+            + 1 + 2 + 1 + (isSecurity ? (apdu.frameBuf!.wIndex < 0x80 ? 21 : 23) : 0);
         const buf = ByteBuf.allocate(bufLen);
 
         buf.writeBytesBE([0xFE, 0xFE, 0xFE, 0xFE, 0x68]);
@@ -52,8 +43,8 @@ export default class GetRequestFrame<GetRequest extends IGetRequest> implements 
             buf.writeUInt8(0x10);
             buf.writeUInt8(0);
 
-            const dataLen = apdu.frameBuf.wIndex + 2
-            if (apdu.frameBuf.wIndex < 0x80) {
+            const dataLen = apdu.frameBuf!.wIndex + 2
+            if (apdu.frameBuf!.wIndex < 0x80) {
                 buf.writeUInt8(dataLen);
             } else {
                 buf.writeUInt8(0x82);
@@ -61,8 +52,15 @@ export default class GetRequestFrame<GetRequest extends IGetRequest> implements 
             }
         }
 
-        buf.writeUInt8(5);
-        buf.writeBytesBE(apdu.frameBuf);
+        if (controlField.sc == 1) {
+            buf.writeUInt8(5 + 0x33);
+            for (let i = 0; i < apdu.frameBuf!.wIndex; i ++) {
+                buf.writeUInt8((apdu.frameBuf!.at(i)! + 0x33) & 0xFF)
+            }
+        } else {
+            buf.writeUInt8(5);
+            buf.writeBytesBE(apdu.frameBuf!);
+        }
 
         // TODO 时间标签
         buf.writeUInt8(0);
@@ -84,23 +82,3 @@ export default class GetRequestFrame<GetRequest extends IGetRequest> implements 
         return this.buf;
     }
 }
-
-// const controlField = new ControlField(MessageRole.CLIENT_REQUEST, 0, 0, FunctionCode.USER_DATA);
-// const addressField =AddressField.of(AddressType.SINGLE, 0, [0, 0, 0, 0, 0, 1], 0)
-
-// const oadList: OAD[] = []
-// for (let i = 0; i < 20; i ++) {
-//     oadList.push(OAD.BasicParam.Address)
-//     oadList.push(OAD.BasicParam.AmmeterNo)
-// }
-// const apdu = new GetRequestNormalList(new PIID(0, 1), oadList)
-// const getRequestFrame = new GetRequestFrame(addressField, controlField, apdu, true)
-// console.log(getRequestFrame.frameBuf.toReadableHexString());
-
-// const oad = OAD.of(0x30, 0x1d, 0x02, 0x00);
-// const rsd = RecordSelectionDesc.selectLatestNumber(2);
-// const rcsd = new RecordColumnSelectionDesc([OAD.of(0x20, 0x22, 0x02, 0x00), OAD.of(0x20, 0x1e, 0x02, 0x00)])
-// const getRecord = new GetRecord(oad, rsd, rcsd)
-// const apdu = new GetRequestRecordList(new PIID(0, 1), [getRecord, getRecord]);
-// const getRequestFrame = new GetRequestFrame(addressField, controlField, apdu, false)
-// console.log(getRequestFrame.frameBuf.toReadableHexString());

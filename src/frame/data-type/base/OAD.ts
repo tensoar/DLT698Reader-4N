@@ -1,31 +1,26 @@
-import type IFragment from "../IFragment.js";
-import {Buffer} from "node:buffer";
-import {ByteBuf} from "../../domain/ByteBuf.js";
+import type IFragment from "../../IFragment.js";
+import {ByteBuf} from "../../../domain/ByteBuf.js";
+import type { IBaseDataType } from "./IBaseDataType.js";
 
-export default class OAD implements IFragment {
-    readonly value: number[];
-    private readonly buf: ByteBuf;
-    constructor(
-        readonly oi: number[],
-        readonly property: number[],
-    ) {
-        if (!oi || !property || oi.length != 2 || property.length !=2) {
-            throw new Error(`Invalid value for OAD, oi and property must be byte array of length 2.`);
-        }
-        this.value = [...oi, ...property];
-        this.buf = ByteBuf.from(this.value);
-    }
+export default class OAD implements IBaseDataType<number[]>, IFragment {
+    value: number[] = [];
+    readonly mark = 81;
+    buf: ByteBuf | null = null;
+    constructor() {}
 
-    get frameBuf(): ByteBuf {
+    get frameBuf(): ByteBuf | null {
         return this.buf;
     }
 
     match(target: OAD | number[] | string): boolean {
+        if (this.buf == null) {
+            return false;
+        }
         if (typeof target === "string") {
             if (!target || target.length < 1) {
                 return false
             }
-            return this.buf.toString('hex', true) === target.toLowerCase();
+            return this.buf!.toString('hex', true) === target.toLowerCase();
         } else {
             const tagetVale = target instanceof Array ? target : target.value;
             if (tagetVale.length != 4) {
@@ -40,8 +35,15 @@ export default class OAD implements IFragment {
         return true;
     }
 
+    parse (buf: ByteBuf) {
+        return OAD.parse(buf);
+    }
+
     static of(b3: number, b2: number, b1: number, b0: number) {
-        return new OAD([b3, b2], [b1, b0]);
+        const oad = new OAD();
+        oad.value = [b3, b2, b1, b0];
+        oad.buf = ByteBuf.from(oad.value);
+        return oad;
     }
 
     static parse(buf: ByteBuf) {

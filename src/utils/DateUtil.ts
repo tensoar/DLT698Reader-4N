@@ -341,7 +341,7 @@ export default class DateUtil {
             return `${StrUtil.padStart(bytes[0]!, 2, '0')}:${StrUtil.padStart(bytes[1]!, 2, '0')}:${StrUtil.padStart(bytes[2]!, 2, '0')}`
         } else {
             const year = (bytes[0]! << 8) | bytes[1]!;
-            return `${year}-${StrUtil.padStart(bytes[2]! - 1, 2, '0')}-${StrUtil.padStart(bytes[3]!, 2, '0')} ${StrUtil.padStart(bytes[4]!, 2, '0')}:${StrUtil.padStart(bytes[5]!, 2, '0')}:${StrUtil.padStart(bytes[6]!, 2, '0')}`
+            return `${year}-${StrUtil.padStart(bytes[2]!, 2, '0')}-${StrUtil.padStart(bytes[3]!, 2, '0')} ${StrUtil.padStart(bytes[4]!, 2, '0')}:${StrUtil.padStart(bytes[5]!, 2, '0')}:${StrUtil.padStart(bytes[6]!, 2, '0')}`
 
         }
     }

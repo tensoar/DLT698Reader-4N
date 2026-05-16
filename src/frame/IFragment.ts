@@ -1,5 +1,5 @@
 import type {ByteBuf} from "../domain/ByteBuf.js";
 
 export default interface IFragment {
-    get frameBuf(): ByteBuf;
+    get frameBuf(): ByteBuf | null;
 }
