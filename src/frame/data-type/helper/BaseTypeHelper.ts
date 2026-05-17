@@ -1,4 +1,4 @@
-import type {IBaseDataType} from "../base/IBaseDataType.js";
+import type {AbsBaseDataType} from "../base/AbsBaseDataType.js";
 import {ByteBuf} from "../../../domain/ByteBuf.js";
 import DtArray from "../base/DtArray.js";
 import DtNull from "../base/DtNull.js";
@@ -25,11 +25,13 @@ import DtDate from "../base/DtDate.js";
 import DtTime from "../base/DtTime.js";
 import OAD from "../base/OAD.js";
 import DtDateTimeS from "../base/DtDateTimeS.js";
+import ObjectIdentifier from "../base/ObjectIdentifier.js";
+import ObjectMethodDesc from "../base/ObjectMethodDesc.js";
 
 export default class BaseTypeHelper {
 
 
-    static decodeOneType<T extends IBaseDataType<any>>(buf: ByteBuf): T {
+    static decodeOneType<T extends AbsBaseDataType<any>>(buf: ByteBuf): T {
         const type = buf.readUInt8();
         const matchedType = this.matchedType(type);
         const typeObj = new matchedType();
@@ -37,7 +39,7 @@ export default class BaseTypeHelper {
         return typeObj as T;
     }
 
-    static matchedType(mark: number): Class<IBaseDataType<any>> {
+    static matchedType(mark: number): Class<AbsBaseDataType<any>> {
         switch (mark) {
             case 0: return DtNull;
             case 1: return DtArray;
@@ -62,7 +64,9 @@ export default class BaseTypeHelper {
             case 26: return DtDate;
             case 27: return DtTime;
             case 28: return DtDateTimeS;
+            case 80: return ObjectIdentifier;
             case 81: return OAD;
+            case 83: return ObjectMethodDesc;
             default: throw new TypeError("Unknown type: " + mark);
         }
     }

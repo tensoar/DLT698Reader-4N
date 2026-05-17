@@ -1,7 +1,7 @@
 {
-  "name": "DLT698-4N",
+  "name": "DLT698Reader-4N",
   "version": "0.0.1",
-  "description": "DLT698 protocol implement for node",
+  "description": "DLT698 protocol reader for node",
   "main": "dist/index.js",
   "author": "tensoar",
   "license": "MIT",

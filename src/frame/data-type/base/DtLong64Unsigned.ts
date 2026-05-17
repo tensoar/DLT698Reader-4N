@@ -1,7 +1,7 @@
 import type { ByteBuf } from "../../../domain/ByteBuf.js";
-import type {IBaseDataType} from "./IBaseDataType.js";
+import {AbsBaseDataType} from "./AbsBaseDataType.js";
 
-export default class DtLong64Unsigned implements IBaseDataType<bigint> {
+export default class DtLong64Unsigned extends AbsBaseDataType<bigint> {
     readonly mark: number = 18;
     value: bigint = BigInt(0);
     parse(byteBuf: ByteBuf): void {

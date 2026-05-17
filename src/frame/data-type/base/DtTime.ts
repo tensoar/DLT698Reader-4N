@@ -1,8 +1,8 @@
 import { ByteBuf } from "../../../domain/ByteBuf.js";
-import type {IBaseDataType} from "./IBaseDataType.js";
+import {AbsBaseDataType} from "./AbsBaseDataType.js";
 import DateUtil from "../../../utils/DateUtil.js";
 
-export default class DtTime implements IBaseDataType<string> {
+export default class DtTime extends AbsBaseDataType<string> {
     readonly mark: number = 27;
     value: string = "";
     private date: Date | null = null;

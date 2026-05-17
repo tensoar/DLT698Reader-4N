@@ -55,7 +55,7 @@ export default class AddressField implements IFragment {
 
     static parse(buf: ByteBuf): AddressField {
         const feature = AddressFeature.parse(buf);
-        const addressBytes = buf.readBytesBE(feature.addressBytesLength + 1);
+        const addressBytes = buf.readBytesBE(feature.addressBytesLength);
         const clientAddress = buf.readUInt8();
         return new AddressField(feature, addressBytes, clientAddress);
     }

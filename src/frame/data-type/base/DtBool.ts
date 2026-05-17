@@ -1,7 +1,7 @@
 import type { ByteBuf } from "../../../domain/ByteBuf.js";
-import type {IBaseDataType} from "./IBaseDataType.js";
+import {AbsBaseDataType} from "./AbsBaseDataType.js";
 
-export default class DtBool implements IBaseDataType<0|1> {
+export default class DtBool extends AbsBaseDataType<0|1> {
     readonly mark: number = 3;
     value: 0 | 1 = 0;
     // buf: ByteBuf;

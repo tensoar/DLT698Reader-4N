@@ -4,20 +4,19 @@ import type AddressField from "../../field/AddressField.js";
 import type IGetResponse from "./IGetResponse.js";
 import FrameCodec from "../../codec/FrameCodec.js";
 import {FrameCheckResult} from "../../../constant/InProtocol.js";
-import AResultNormal from "./domain/AResultNormal.js";
-import type { IBaseDataType } from "../../data-type/base/IBaseDataType.js";
+import ResultNormal from "./domain/ResultNormal.js";
+import type { AbsBaseDataType } from "../../data-type/base/AbsBaseDataType.js";
 
-export default class GetResponseNormal<T extends IBaseDataType<any>> implements IGetResponse {
+export default class GetResponseNormal<T extends AbsBaseDataType<any>> implements IGetResponse {
     private constructor(
         readonly piid: PIID,
-        readonly result: AResultNormal<T>
+        readonly resultNormal: ResultNormal<T>
     ) {
     }
 
-    static parse<T extends IBaseDataType<any>>(frameBuf: ByteBuf) {
+    static parse<T extends AbsBaseDataType<any>>(frameBuf: ByteBuf) {
         const piid = PIID.parse(frameBuf);
-        const result = AResultNormal.parse(frameBuf);
+        const result = ResultNormal.parse(frameBuf);
         return new GetResponseNormal(piid, result) as GetResponseNormal<T>;
     }
-
 }

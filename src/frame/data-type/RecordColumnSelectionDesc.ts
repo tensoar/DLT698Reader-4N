@@ -17,7 +17,7 @@ export default class RecordColumnSelectionDesc implements IFragment {
     static parse(buf: ByteBuf) : RecordColumnSelectionDesc {
         const seqOf = buf.readUInt8();
         if (seqOf < 1) {
-            return new RecordColumnSelectionDesc([])
+            return new RecordColumnSelectionDesc([]);
         }
         const oadList: OAD[] = [];
         for (let i = 0; i < seqOf; i++) {
@@ -31,7 +31,7 @@ export default class RecordColumnSelectionDesc implements IFragment {
         return this.buf;
     }
 
-    get seqOf() {
+    get length() {
         return this.relatedColumOadList.length;
     }
 

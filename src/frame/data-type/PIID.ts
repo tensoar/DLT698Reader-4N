@@ -28,4 +28,8 @@ export default class PIID implements IFragment{
     }
 
     static readonly DEFAULT = new PIID(0, 0);
+
+    toReadableString() {
+        return `${this.value}(priority: ${this.priority}, index: ${this.index})`;
+    }
 }

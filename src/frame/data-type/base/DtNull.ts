@@ -1,7 +1,7 @@
 import type { ByteBuf } from "../../../domain/ByteBuf.js";
-import type {IBaseDataType} from "./IBaseDataType.js";
+import {AbsBaseDataType} from "./AbsBaseDataType.js";
 
-export default class DtNull implements IBaseDataType<null> {
+export default class DtNull extends AbsBaseDataType<null> {
     readonly mark: number = 0;
     value = null;
     parse(byteBuf: ByteBuf): void {

@@ -1,7 +1,7 @@
 import type { ByteBuf } from "../../../domain/ByteBuf.js";
-import type {IBaseDataType} from "./IBaseDataType.js";
+import {AbsBaseDataType} from "./AbsBaseDataType.js";
 
-export default class DtUTF8String implements IBaseDataType<string> {
+export default class DtUTF8String extends AbsBaseDataType<string> {
     readonly mark: number = 12;
     value: string = "";
     parse(byteBuf: ByteBuf): void {

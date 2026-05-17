@@ -1,14 +1,14 @@
 import type { ByteBuf } from "../../../../domain/ByteBuf.js";
-import type { IBaseDataType } from "../../../data-type/base/IBaseDataType.js";
+import type { AbsBaseDataType } from "../../../data-type/base/AbsBaseDataType.js";
 import BaseTypeHelper from "../../../data-type/helper/BaseTypeHelper.js";
 
-export default class GetResult<T extends IBaseDataType<any>> {
+export default class GetResult<T extends AbsBaseDataType<any>> {
     constructor(
-        readonly dar: number = 0,
+        readonly resultType: number = 0,
         readonly data: T | null = null
     ) {}
 
-    static parse<T extends IBaseDataType<any>>(apduBuf: ByteBuf) {
+    static parse<T extends AbsBaseDataType<any>>(apduBuf: ByteBuf) {
         const dar = apduBuf.readUInt8();
         console.log(4, apduBuf.toString('hex', false))
         let d: T | null = null;
@@ -16,5 +16,9 @@ export default class GetResult<T extends IBaseDataType<any>> {
             d = BaseTypeHelper.decodeOneType(apduBuf);
         }
         return new GetResult(dar, d);
+    }
+
+    toReadableString() {
+        return `resultType: ${this.resultType}, data: ${this.data?.toReadableString()}`
     }
 }

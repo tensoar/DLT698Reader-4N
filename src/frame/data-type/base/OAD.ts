@@ -1,19 +1,19 @@
 import type IFragment from "../../IFragment.js";
 import {ByteBuf} from "../../../domain/ByteBuf.js";
-import type { IBaseDataType } from "./IBaseDataType.js";
+import { AbsBaseDataType } from "./AbsBaseDataType.js";
+import {inspect} from "node:util";
 
-export default class OAD implements IBaseDataType<number[]>, IFragment {
+export default class OAD extends AbsBaseDataType<number[]> implements IFragment {
     value: number[] = [];
     readonly mark = 81;
     buf: ByteBuf | null = null;
-    constructor() {}
 
     get frameBuf(): ByteBuf | null {
         return this.buf;
     }
 
     match(target: OAD | number[] | string): boolean {
-        if (this.buf == null) {
+        if (this.buf == null || !target) {
             return false;
         }
         if (typeof target === "string") {
@@ -37,6 +37,17 @@ export default class OAD implements IBaseDataType<number[]>, IFragment {
 
     parse (buf: ByteBuf) {
         return OAD.parse(buf);
+    }
+
+    toString() {
+        if (this.buf == null) {
+            return "";
+        }
+        return this.buf.toReadableHexString(true, false);
+    }
+
+    [inspect.custom]() {
+        return this.toString();
     }
 
     static of(b3: number, b2: number, b1: number, b0: number) {

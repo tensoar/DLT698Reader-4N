@@ -1,3 +1,3 @@
-# DLT698-4N
+# DLT698Reader-4N
 
-DLT698 protocol implement for node.js
+DLT698 protocol reader for node.js

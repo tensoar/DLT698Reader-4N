@@ -1,8 +1,8 @@
 import type { ByteBuf } from "../../../domain/ByteBuf.js";
-import type {IBaseDataType} from "./IBaseDataType.js";
+import {AbsBaseDataType} from "./AbsBaseDataType.js";
 import BaseTypeHelper from "../helper/BaseTypeHelper.js";
 
-export default class DtArray<T extends IBaseDataType<any>> implements IBaseDataType<T[]> {
+export default class DtArray<T extends AbsBaseDataType<any>> extends AbsBaseDataType<T[]> {
     readonly mark = 1;
     readonly value: T[] = [];
 

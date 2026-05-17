@@ -296,19 +296,19 @@ export default class DateUtil {
 
     static bcdBytes2DateBE(bytes: number[], schema: 'DATE_TIME' | 'DATE'| 'TIME' | 'DATE_TIME_S') {
         if (schema === 'TIME' && bytes.includes(0xFF)) {
-            console.warn("Meaningless time format");
             return null;
         } else {
             if (bytes[0] == 0xFF && bytes[1] == 0xFF) {
-                console.warn("Meaningless time format");
                 return null;
             }
             for (let i = 2; i < bytes.length; i++) {
                 if (bytes[i] == 0xFF) {
-                    console.warn("Meaningless time format");
                     return null;
                 }
             }
+        }
+        if (!bytes.find(b => b != 0)) {
+            return null;
         }
         if (schema === 'DATE_TIME') {
             const year = (bytes[0]! << 8) | bytes[1]!;
@@ -330,18 +330,18 @@ export default class DateUtil {
         if (schema === 'DATE_TIME') {
             const year = (bytes[0]! << 8) | bytes[1]!;
             const mills = (bytes[8]! << 8) | bytes[9]!;
-            return `${year}-${StrUtil.padStart(bytes[2]! - 1, 2, '0')}-${StrUtil.padStart(bytes[3]!, 2, '0')}`
+            return `${year == 0 ? "0000" : year}-${StrUtil.padStart(bytes[2]! - 1, 2, '0')}-${StrUtil.padStart(bytes[3]!, 2, '0')}`
                 + ` ${StrUtil.padStart(bytes[5]!, 2, '0')}:${StrUtil.padStart(bytes[6]!, 2, '0')}:${StrUtil.padStart(bytes[7]!, 2, '0')}`
                 + `.${mills}`
                 + ` Week ${bytes[4]}`
         } else if (schema === 'DATE') {
             const year = (bytes[0]! << 8) | bytes[1]!;
-            return `${year}-${StrUtil.padStart(bytes[2]! - 1, 2, '0')}-${StrUtil.padStart(bytes[3]!, 2, '0')}`
+            return `${year == 0 ? "0000" : year}-${StrUtil.padStart(bytes[2]! - 1, 2, '0')}-${StrUtil.padStart(bytes[3]!, 2, '0')}`
         } else if (schema === 'TIME') {
             return `${StrUtil.padStart(bytes[0]!, 2, '0')}:${StrUtil.padStart(bytes[1]!, 2, '0')}:${StrUtil.padStart(bytes[2]!, 2, '0')}`
         } else {
             const year = (bytes[0]! << 8) | bytes[1]!;
-            return `${year}-${StrUtil.padStart(bytes[2]!, 2, '0')}-${StrUtil.padStart(bytes[3]!, 2, '0')} ${StrUtil.padStart(bytes[4]!, 2, '0')}:${StrUtil.padStart(bytes[5]!, 2, '0')}:${StrUtil.padStart(bytes[6]!, 2, '0')}`
+            return `${year == 0 ? "0000" : year}-${StrUtil.padStart(bytes[2]!, 2, '0')}-${StrUtil.padStart(bytes[3]!, 2, '0')} ${StrUtil.padStart(bytes[4]!, 2, '0')}:${StrUtil.padStart(bytes[5]!, 2, '0')}:${StrUtil.padStart(bytes[6]!, 2, '0')}`
 
         }
     }

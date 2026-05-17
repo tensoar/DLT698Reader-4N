@@ -5,15 +5,20 @@ import GetResponseFrame from "../GetResponseFrame.js";
 import FrameCodec from "./FrameCodec.js";
 import EnumUtil from "../../utils/EnumUtil.js";
 import GetResponseNormal from "../apdu/response/GetResponseNormal.js";
+import GetResponseNormalList from "../apdu/response/GetResponseNormalList.js";
+import GetResponseRecord from "../apdu/response/GetResponseRecord.js";
+import OAD from "../data-type/base/OAD.js";
+import GetResponseRecordList from "../apdu/response/GetResponseRecordList.js";
 
 export default class ApduParser {
     static parseResponseApdu(frames: GetResponseFrame[]) {
-        const sortedFrames = frames.sort((a, b) => b.framedInfo.frameNumber - a.framedInfo.frameNumber);
+        const sortedFrames = frames.sort((a, b) => a.framedInfo.frameNumber - b.framedInfo.frameNumber);
         if (sortedFrames.find(f => f.frameCheckResult != FrameCheckResult.OK)) {
             return ParseResult.fail(`Has invalid frame check result`);
         }
         const buf = ByteBuf.allocate(sortedFrames.reduce((count, frame) => count + frame.pureApduBuf!.wIndex, 0));
         sortedFrames.forEach(f => buf.writeBytesBE(f.pureApduBuf!));
+        // console.log(buf.toReadableHexString())
         let getType = buf.readUInt8();
         if (getType == 0x90) {
             const securityType = buf.readUInt8();
@@ -37,13 +42,10 @@ export default class ApduParser {
         const respType = EnumUtil.fromValue(GetResponseType, buf.readUInt8());
         switch (respType) {
             case GetResponseType.GET_RESPONSE_NORMAL: return GetResponseNormal.parse(buf);
+            case GetResponseType.GET_RESPONSE_NORMAL_LIST: return GetResponseNormalList.parse(buf);
+            case GetResponseType.GET_RESPONSE_RECORD: return GetResponseRecord.parse(buf);
+            case GetResponseType.GET_RESPONSE_RECORD_LIST: return GetResponseRecordList.parse(buf);
             default: return ParseResult.fail(`Unknown response type ${respType}`);
         }
     }
 }
-
-// const frameBuf = ByteBuf.from([0x68, 0x21, 0x00, 0xc3, 0x05, 0x32, 0x16, 0x16, 0x38, 0x20, 0x90, 0xa0, 0x38, 0xf9, 0x85, 0x01, 0x00, 0x40, 0x00, 0x02,
-//  0x00, 0x01, 0x1c, 0x07, 0xe6, 0x0c, 0x0b, 0x13, 0x33, 0x20, 0x00, 0x00, 0xc1, 0x00, 0x16]);
-// const frame = new GetResponseFrame(frameBuf);
-// const result = ApduParser.parseResponseApdu([frame]) as GetResponseNormal<any>
-// console.log(result.result.result.data)

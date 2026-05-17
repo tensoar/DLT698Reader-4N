@@ -1,7 +1,7 @@
 import type { ByteBuf } from "../../../domain/ByteBuf.js";
-import type {IBaseDataType} from "./IBaseDataType.js";
+import {AbsBaseDataType} from "./AbsBaseDataType.js";
 
-export default class DtBitString implements IBaseDataType<number[]> {
+export default class DtBitString extends AbsBaseDataType<number[]> {
     readonly mark: number = 4;
     bitLen: number = 0;
     value: number[] = [];
