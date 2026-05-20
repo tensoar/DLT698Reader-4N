@@ -356,7 +356,6 @@ export class ByteBuf {
         this.writeBuffer(bytes);
     }
 
-    //工具方法
     public readableBytes(): number {
         return this.writeIndex - this.readIndex;
     }
@@ -389,6 +388,15 @@ export class ByteBuf {
 
     public rawBuffer(): Buffer {
         return this.buffer;
+    }
+
+    public getBuffer(ignoreReadIndex = true): Buffer {
+        let startIndex = ignoreReadIndex ? 0 : this.rIndex;
+        const buf = Buffer.alloc(this.wIndex - startIndex);
+        for (let i = startIndex; i < this.wIndex; i ++) {
+            buf[i] = this.buffer[i] as number;
+        }
+        return buf;
     }
 
     public at(index: number): number {

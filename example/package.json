@@ -1,0 +1,17 @@
+{
+  "name": "dlt-698-reader-4n-example",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "tensoar",
+  "license": "MIT",
+  "type": "module",
+  "dependencies": {
+    "DLT698Reader-4N": "file:..",
+    "serialport": "^13.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.19.15",
+    "tsx": "^4.22.3",
+    "typescript": "^6.0.3"
+  }
+}

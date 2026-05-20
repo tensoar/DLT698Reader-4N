@@ -1,0 +1,1 @@
+{"version":3,"file":"AbsBaseDataType.d.ts","sourceRoot":"","sources":["../../../../src/frame/data-type/base/AbsBaseDataType.ts"],"names":[],"mappings":"AACA,OAAO,KAAK,EAAC,OAAO,EAAC,MAAM,4BAA4B,CAAC;AAExD,8BAAsB,eAAe,CAAC,CAAC;IACnC,QAAQ,CAAC,QAAQ,CAAC,IAAI,EAAE,MAAM,CAAC;IAC/B,QAAQ,CAAC,KAAK,EAAE,CAAC,CAAA;IAEjB,QAAQ,CAAC,KAAK,CAAC,OAAO,EAAE,OAAO,GAAG,IAAI;IAEtC,gBAAgB;CAKnB"}

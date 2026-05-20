@@ -1,6 +1,7 @@
-import type { ByteBuf } from "../domain/ByteBuf.js";
-
 export default interface InteractionAdapter {
-
-    sendAndReceive(buf: ByteBuf): Promise<ByteBuf>;
+    open(): Promise<boolean>;
+    close(): Promise<boolean>;
+    send(data: Buffer): Promise<boolean>;
+    onData(cb: (data: Buffer) => void): void;
+    isOpen(): boolean;
 }
