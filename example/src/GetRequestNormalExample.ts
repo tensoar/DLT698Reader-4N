@@ -1,21 +1,41 @@
-import {ControlField, MessageRole, FunctionCode, AddressField, AddressType, OAD, PIID, GetRequestNormalList, GetRequestFrame, RecordSelectionDesc, RecordColumnSelectionDesc, GetRequestRecordList} from "DLT698Reader-4N"
+// Example - 读取一个普通对象属性(GetRequestNormal)
+import {AddressField, OAD, SerialPortAdaptor, DLT698Client, DLT698Reader, AddressType} from "DLT698Reader-4N"
 
-const controlField = new ControlField(MessageRole.CLIENT_REQUEST, 0, 0, FunctionCode.USER_DATA);
-const addressField =AddressField.of(AddressType.SINGLE, 0, [0, 0, 0, 0, 0, 1], 0)
-
-const oadList: OAD[] = []
-for (let i = 0; i < 20; i ++) {
-    oadList.push(OAD.BasicParam.Address)
-    oadList.push(OAD.BasicParam.AmmeterNo)
+const adaptor = new SerialPortAdaptor({
+    path: "/dev/ttyS1",
+    baudRate: 9600,
+    autoOpen: false,
+});
+const client = new DLT698Client(adaptor);
+const reader = new DLT698Reader(client);
+if (!await reader.openConnection()) {
+    throw new Error(`Open connection failed ...`);
 }
-const apdu = new GetRequestNormalList(new PIID(0, 1), oadList)
-const getRequestFrame = new GetRequestFrame(addressField, controlField, apdu, true)
-console.log(getRequestFrame.frameBuf.toReadableHexString());
+console.log(`Connection opened ...`);
 
-// const oad = OAD.of(0x30, 0x1d, 0x02, 0x00);
-// const rsd = RecordSelectionDesc.selectLatestNumber(2);
-// const rcsd = new RecordColumnSelectionDesc([OAD.of(0x20, 0x22, 0x02, 0x00), OAD.of(0x20, 0x1e, 0x02, 0x00)])
-// const getRecord = new GetRecord(oad, rsd, rcsd)
-// const apdu = new GetRequestRecordList(new PIID(0, 1), [getRecord, getRecord]);
-// const getRequestFrame = new GetRequestFrame(addressField, controlField, apdu, false)
-// console.log(getRequestFrame.frameBuf.toReadableHexString());
+/** 读取地址 */
+const oad = OAD.BasicParam.Address;
+const addressFiledWild = AddressField.WILDCARD_ADDRESS;
+let address = "";
+try {
+    const addressResult = await reader.getRequestNormalSimple(addressFiledWild, oad, false);
+    address = addressResult.resultNormal.result.data?.value;
+    console.log(`Ammeter address: `, address);
+} catch (e) {
+    await reader.closeConnection();
+    throw e;
+}
+
+
+/** 读取电压 */
+const addressField = AddressField.of(AddressType.SINGLE, 0, address, 0);
+try {
+    // 电压OAD为 20 00 02 00
+    const oad = OAD.of(0x20, 0x00, 0x02, 0x00);
+    const result = await reader.getRequestNormalSimple(addressField, oad, true);
+    console.log(`Ammeter votage: `, result.resultNormal.result.data?.value);
+} catch (e) {
+    throw e;
+} finally {
+    await reader.closeConnection();
+}

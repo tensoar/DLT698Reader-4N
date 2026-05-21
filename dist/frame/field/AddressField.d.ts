@@ -19,7 +19,7 @@ export default class AddressField implements IFragment {
     readonly serverAddressStr: string;
     constructor(feature: AddressFeature, addressBytes: number[], clientAddress: number);
     static readonly WILDCARD_ADDRESS: AddressField;
-    static of(addressType: AddressType, logicAddress: number, addressBytes: number[], clientAddress: number): AddressField;
+    static of(addressType: AddressType, logicAddress: number, addressBytesOrStr: number[] | string, clientAddress: number): AddressField;
     static parse(buf: ByteBuf): AddressField;
     get frameBuf(): ByteBuf;
 }

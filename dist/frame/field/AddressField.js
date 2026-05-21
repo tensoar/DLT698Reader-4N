@@ -46,7 +46,15 @@ export default class AddressField {
         this.serverAddressStr = ByteBuf.from(addressBytes).readHexLE(addressBytes.length);
     }
     static WILDCARD_ADDRESS = AddressField.of(AddressType.WILDCARD, 0, [0xaa, 0xaa, 0xaa, 0xaa, 0xaa, 0xaa], 0);
-    static of(addressType, logicAddress, addressBytes, clientAddress) {
+    static of(addressType, logicAddress, addressBytesOrStr, clientAddress) {
+        let addressBytes;
+        if (typeof addressBytesOrStr == 'string') {
+            const buf = Buffer.from(addressBytesOrStr, 'hex');
+            addressBytes = ByteBuf.wrap(buf).readBytesLE(buf.length);
+        }
+        else {
+            addressBytes = addressBytesOrStr;
+        }
         return new AddressField(new AddressFeature(addressType, logicAddress, addressBytes.length), addressBytes, clientAddress);
     }
     static parse(buf) {

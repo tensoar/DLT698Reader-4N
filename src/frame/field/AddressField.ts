@@ -49,7 +49,14 @@ export default class AddressField implements IFragment {
 
     static readonly WILDCARD_ADDRESS = AddressField.of(AddressType.WILDCARD, 0, [0xaa, 0xaa, 0xaa, 0xaa, 0xaa, 0xaa], 0);
 
-    static of(addressType: AddressType, logicAddress: number, addressBytes: number[], clientAddress: number): AddressField {
+    static of(addressType: AddressType, logicAddress: number, addressBytesOrStr: number[] | string, clientAddress: number): AddressField {
+        let addressBytes: number[];
+        if (typeof addressBytesOrStr == 'string') {
+            const buf = Buffer.from(addressBytesOrStr, 'hex');
+            addressBytes = ByteBuf.wrap(buf).readBytesLE(buf.length);
+        } else {
+            addressBytes = addressBytesOrStr;
+        }
         return new AddressField(new AddressFeature(addressType, logicAddress, addressBytes.length), addressBytes, clientAddress)
     }
 
