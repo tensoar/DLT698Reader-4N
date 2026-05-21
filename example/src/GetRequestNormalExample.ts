@@ -2,11 +2,11 @@
 import {AddressField, OAD, SerialPortAdaptor, DLT698Client, DLT698Reader, AddressType} from "DLT698Reader-4N"
 
 const adaptor = new SerialPortAdaptor({
-    path: "/dev/ttyS1",
-    baudRate: 9600,
+    path: "com1",
+    baudRate: 2400,
     autoOpen: false,
 });
-const client = new DLT698Client(adaptor);
+const client = new DLT698Client(adaptor, true);
 const reader = new DLT698Reader(client);
 if (!await reader.openConnection()) {
     throw new Error(`Open connection failed ...`);
