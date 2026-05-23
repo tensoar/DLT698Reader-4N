@@ -185,35 +185,9 @@ export default class DateUtil {
         return preTime.getTime() > nextDate.getTime();
     }
 
-    static* generateLoadDataTimeIterators(startTime: Date, endTime: Date, loadDataStartMinute: number, loadDataInterval: number) {
-        let loadTime = this.nearestLoadDataTime(startTime, loadDataStartMinute, loadDataInterval);
-        if (this.isAfter(loadTime, endTime)) {
-            throw new Error(`There is no load data time in the time range ...`);
-        }
-        while (!this.isAfter(loadTime, endTime)) {
-            yield loadTime;
-            loadTime = this.plus(loadTime, loadDataInterval, TimeUnit.MINUTE);
-        }
-    }
-
-    static nearestLoadDataTime(date: Date, loadDataStartMinute: number, loadDataInterval: number) {
-        let nearestDate = date;
-        if (nearestDate.getMinutes() === loadDataStartMinute) {
-            return nearestDate;
-        }
-        while (true) {
-            if (nearestDate.getMinutes() === loadDataStartMinute || (nearestDate.getMinutes() % loadDataInterval) === loadDataStartMinute) {
-                return new Date(nearestDate.getFullYear(), nearestDate.getMonth(), nearestDate.getDate(), nearestDate.getHours(), nearestDate.getMinutes());
-            }
-            nearestDate = this.plus(nearestDate, 1, TimeUnit.MINUTE);
-        }
-    }
-
-
     static getFullTimeValueStr(value: number) {
         return value < 10 ? '0' + value : value.toString();
     }
-
 
     static date2BcdBytesBE(date: Date, schema: 'DATE_TIME' | 'DATE'| 'TIME' | 'DATE_TIME_S') {
         const year = date.getFullYear();
