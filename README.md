@@ -6,7 +6,13 @@ DLT698协议读取解析实现，自动处理分帧，支持的读取类型：
 * 读取一个记录型对象属性(`GetRequestRecord`)
 * 读取若干个记录型对象属性(`GetRequestRecordList`)
 
-# 读取一个对象属性(`GetRequestNormal`)
+## 编译
+
+```
+> npm run build
+```
+
+## 读取一个对象属性(`GetRequestNormal`)
 
 ```typescript
 import {AddressField, OAD, SerialPortAdaptor, DLT698Client, DLT698Reader, AddressType} from "DLT698Reader-4N"
@@ -25,7 +31,7 @@ if (!await reader.openConnection()) {
 console.log(`Connection opened ...`);
 
 /** 读取地址 */
-const oad = OAD.BasicParam.Address;
+const oad = OAD.of(0x40, 0x01, 0x02, 0x00);
 const addressFiledWild = AddressField.WILDCARD_ADDRESS;
 let address = "";
 try {
