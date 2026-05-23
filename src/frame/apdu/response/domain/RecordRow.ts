@@ -11,7 +11,6 @@ export default class RecordRow {
     ) {}
 
     static parse(apduBuf: ByteBuf, rowLen: number) {
-        // const seqLen = FrameCodec.extralContentLength(apduBuf);
         const list: AbsBaseDataType<any>[] = [];
         for (let i = 0; i < rowLen; i ++) {
             list.push(BaseTypeHelper.decodeOneType(apduBuf));

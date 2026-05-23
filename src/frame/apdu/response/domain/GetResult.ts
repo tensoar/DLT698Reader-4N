@@ -10,7 +10,6 @@ export default class GetResult<T extends AbsBaseDataType<any>> {
 
     static parse<T extends AbsBaseDataType<any>>(apduBuf: ByteBuf) {
         const dar = apduBuf.readUInt8();
-        console.log(4, apduBuf.toString('hex', false))
         let d: T | null = null;
         if (dar == 1) {
             d = BaseTypeHelper.decodeOneType(apduBuf);
