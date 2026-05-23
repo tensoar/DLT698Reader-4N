@@ -1,1 +1,0 @@
-{"version":3,"file":"DtDoubleLong.js","sourceRoot":"","sources":["../../../../src/frame/data-type/base/DtDoubleLong.ts"],"names":[],"mappings":"AACA,OAAO,EAAC,eAAe,EAAC,MAAM,sBAAsB,CAAC;AAErD,MAAM,CAAC,OAAO,OAAO,YAAa,SAAQ,eAAuB;IACpD,IAAI,GAAW,CAAC,CAAC;IAC1B,KAAK,GAAW,CAAC,CAAC;IAClB,KAAK,CAAC,OAAgB;QAClB,IAAI,CAAC,KAAK,GAAG,OAAO,CAAC,WAAW,EAAE,CAAC;IACvC,CAAC;CACJ"}

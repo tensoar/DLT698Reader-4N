@@ -1,1 +1,0 @@
-{"version":3,"file":"IBaseEnum.d.ts","sourceRoot":"","sources":["../../src/constant/IBaseEnum.ts"],"names":[],"mappings":"AAAA,OAAO,KAAK,EAAE,SAAS,EAAE,MAAM,mBAAmB,CAAC;AAEnD,MAAM,CAAC,OAAO,WAAW,SAAS,CAAC,CAAC,SAAS,SAAS;IAClD,QAAQ,CAAC,KAAK,EAAE,CAAC,CAAC;IAClB,QAAQ,CAAC,WAAW,EAAE,MAAM,CAAC;CAChC"}

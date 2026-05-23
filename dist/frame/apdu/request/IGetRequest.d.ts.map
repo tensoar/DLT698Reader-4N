@@ -1,1 +1,0 @@
-{"version":3,"file":"IGetRequest.d.ts","sourceRoot":"","sources":["../../../../src/frame/apdu/request/IGetRequest.ts"],"names":[],"mappings":"AAAA,OAAO,KAAK,IAAI,MAAM,yBAAyB,CAAC;AAChD,OAAO,KAAK,SAAS,MAAM,oBAAoB,CAAC;AAEhD,MAAM,WAAW,WAAY,SAAQ,SAAS;IAE1C,IAAI,EAAE,IAAI,CAAC;CACd"}

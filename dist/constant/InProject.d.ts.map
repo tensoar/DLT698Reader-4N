@@ -1,1 +1,0 @@
-{"version":3,"file":"InProject.d.ts","sourceRoot":"","sources":["../../src/constant/InProject.ts"],"names":[],"mappings":"AAAA,OAAO,KAAK,SAAS,MAAM,gBAAgB,CAAC;AAE5C,qBAAa,MAAO,YAAW,SAAS,CAAC,MAAM,CAAC;aAExB,KAAK,EAAE,MAAM;aACb,WAAW,EAAE,MAAM;IAFvC,OAAO;IAKP,MAAM,CAAC,QAAQ,CAAC,EAAE,SAAwB;IAC1C,MAAM,CAAC,QAAQ,CAAC,EAAE,SAAwB;CAC7C"}
