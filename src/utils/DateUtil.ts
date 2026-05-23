@@ -214,42 +214,6 @@ export default class DateUtil {
         return value < 10 ? '0' + value : value.toString();
     }
 
-    /**
-     * 指定时间内的所有冻结点
-     */
-    static* generateFreezeDataIteratorByTimeRange(startTime: Date, endTime: Date) {
-        let nearestStartFreezeDate = this.nextNearestFreezeDate(startTime);
-        while (nearestStartFreezeDate.getTime() <= endTime.getTime()) {
-            yield nearestStartFreezeDate;
-            nearestStartFreezeDate = this.plus(nearestStartFreezeDate, 15, TimeUnit.MINUTE);
-        }
-    }
-
-    /**
-     * 计算离日期最近的下一个冻结点
-     * @param date 日期
-     * @returns 离日期最近的下一个冻结点
-     */
-    static nextNearestFreezeDate(date: Date) {
-        let freezeMinute: number;
-        let toNextHour = false;
-        const stuckOnMinute = date.getSeconds() === 0 && date.getMilliseconds() === 0;
-        const minute = date.getMinutes();
-        if (stuckOnMinute && minute === 0) {
-            freezeMinute = 0;
-        } else if ((stuckOnMinute && minute === 15) || minute < 15) {
-            freezeMinute = 15;
-        } else if ((stuckOnMinute && minute === 30) || minute < 30) {
-            freezeMinute = 30;
-        } else if ((stuckOnMinute && minute === 45) || minute < 45) {
-            freezeMinute = 45;
-        } else {
-            freezeMinute = 0;
-            toNextHour = true;
-        }
-        const freezeDate = new Date(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(), freezeMinute, 0, 0);
-        return toNextHour ? this.plus(freezeDate, 1, TimeUnit.HOUR) : freezeDate;
-    }
 
     static date2BcdBytesBE(date: Date, schema: 'DATE_TIME' | 'DATE'| 'TIME' | 'DATE_TIME_S') {
         const year = date.getFullYear();
