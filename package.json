@@ -6,6 +6,7 @@
   "author": "tensoar",
   "license": "MIT",
   "type": "module",
+  "keywords": ["DL/T698", "DLT698", "698", "DLT698Reader"],
   "scripts": {
     "build": "npx tsc"
   },
