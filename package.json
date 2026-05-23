@@ -6,6 +6,9 @@
   "author": "tensoar",
   "license": "MIT",
   "type": "module",
+  "scripts": {
+    "build": "npx tsc"
+  },
   "dependencies": {
     "@types/node": "^22.19.15",
     "serialport": "^13.0.0"

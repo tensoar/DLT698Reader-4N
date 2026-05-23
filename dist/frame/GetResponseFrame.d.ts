@@ -13,7 +13,7 @@ export default class GetResponseFrame implements IFragment {
     readonly pureApduBuf: ByteBuf | null;
     readonly framedInfo: FramedInfo;
     constructor(frameBuf: ByteBuf);
-    hasNextFrame(): boolean;
+    hasNextFrame(): boolean | 0 | undefined;
     genRequestNextFrameBuf(): ByteBuf;
     private consumePrefixBytes;
     get frameBuf(): ByteBuf;

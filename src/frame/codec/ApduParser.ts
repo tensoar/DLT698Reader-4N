@@ -18,7 +18,6 @@ export default class ApduParser {
         }
         const buf = ByteBuf.allocate(sortedFrames.reduce((count, frame) => count + frame.pureApduBuf!.wIndex, 0));
         sortedFrames.forEach(f => buf.writeBytesBE(f.pureApduBuf!));
-        // console.log(buf.toReadableHexString())
         let getType = buf.readUInt8();
         if (getType == 0x90) {
             const securityType = buf.readUInt8();
@@ -29,7 +28,7 @@ export default class ApduParser {
             } else if (securityType != 0) {
                 return ParseResult.fail(`Unsupported APDU Encrypt type: ${securityType}`);
             }
-            const len = FrameCodec.extralContentLength(buf);
+            const len = FrameCodec.extraContentLength(buf);
             if (buf.readableBytes() < len) {
                 return ParseResult.fail(`Security len error, except: ${len}, real: ${len}`);
             }

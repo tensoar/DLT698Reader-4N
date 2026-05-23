@@ -138,13 +138,12 @@ export class ByteBuf {
         return arr;
     }
     readBytesLE(length) {
-        const arr = [];
-        const index = this.readIndex;
-        for (let i = length - 1; i >= 0; i--) {
-            arr.push(this.buffer.at(index + i));
-            this.readIndex += 1;
+        const bytes = [];
+        for (let i = 0; i < length; i++) {
+            bytes.push(this.buffer.at(this.readIndex));
+            this.readIndex++;
         }
-        return arr;
+        return bytes.reverse();
     }
     readStringBE(length) {
         const str = this.buffer.toString('utf8', this.readIndex, this.readIndex + length);

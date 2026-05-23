@@ -1,4 +1,4 @@
-import { FrameCheckResult } from "../constant/InProtocol.js";
+import { FrameCheckResult } from "../constant/index.js";
 import { ByteBuf } from "../domain/ByteBuf.js";
 import FrameCodec from "../frame/codec/FrameCodec.js";
 import DateUtil from "../utils/DateUtil.js";
@@ -14,7 +14,7 @@ export default class DLT698Client {
         this.adaptor = adaptor;
         this.printData = printData;
         this.readTimeoutMills = readTimeoutMills;
-        this.adaptor.onData(this.onData);
+        this.adaptor.onData((data) => this.onData(data));
     }
     async sendAndReceive(data) {
         if (!this.adaptor.isOpen()) {
@@ -51,7 +51,6 @@ export default class DLT698Client {
         this.recvBuf = Buffer.concat([this.recvBuf, data]);
         try {
             const byteBuf = ByteBuf.wrap(this.recvBuf);
-            console.log("RECV -- ", ByteBuf.wrap(this.recvBuf).toReadableHexString());
             if (FrameCodec.checkFrame(byteBuf) == FrameCheckResult.OK) {
                 if (this.printData) {
                     console.log(`${DateUtil.date2Format(new Date(), "yyyy-MM-dd HH:mm:ss.SSS")} Recv: `, byteBuf.toReadableHexString());

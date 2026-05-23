@@ -51,7 +51,7 @@ export default class FrameCodec {
         return FrameCheckResult.OK;
     }
 
-    static extralContentLength(buf: ByteBuf) {
+    static extraContentLength(buf: ByteBuf) {
         const len = buf.readUInt8();
         if (len < 0x80) {
             return len;

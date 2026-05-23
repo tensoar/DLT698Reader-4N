@@ -19,7 +19,7 @@ export default class ResultRecord {
         const resultType = apduBuf.readUInt8();
         let recordRow = null;
         if (resultType == 1) {
-            const len = FrameCodec.extralContentLength(apduBuf);
+            const len = FrameCodec.extraContentLength(apduBuf);
             if (len == 1) {
                 recordRow = RecordRow.parse(apduBuf, rcds.length);
             }

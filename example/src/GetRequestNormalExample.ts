@@ -6,7 +6,7 @@ const adaptor = new SerialPortAdaptor({
     baudRate: 2400,
     autoOpen: false,
 });
-const client = new DLT698Client(adaptor, true);
+const client = new DLT698Client(adaptor, true, 3000);
 const reader = new DLT698Reader(client);
 if (!await reader.openConnection()) {
     throw new Error(`Open connection failed ...`);
@@ -30,10 +30,9 @@ try {
 /** 读取电压 */
 const addressField = AddressField.of(AddressType.SINGLE, 0, address, 0);
 try {
-    // 电压OAD为 20 00 02 00
     const oad = OAD.of(0x20, 0x00, 0x02, 0x00);
     const result = await reader.getRequestNormalSimple(addressField, oad, true);
-    console.log(`Ammeter votage: `, result.resultNormal.result.data?.value);
+    console.log(`Ammeter V: `, result.resultNormal.result.data?.value);
 } catch (e) {
     throw e;
 } finally {

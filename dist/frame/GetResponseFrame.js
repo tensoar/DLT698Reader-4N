@@ -24,12 +24,10 @@ export default class GetResponseFrame {
         this.controlField = ControlField.parse(frameBuf);
         this.addressField = AddressField.parse(frameBuf);
         this.buf.readUInt16BE();
-        console.log(this.buf.toString('hex', false));
         if (this.controlField.isFramed) {
             this.framedInfo = FramedInfo.parse(frameBuf);
         }
-        // const apudStartIndex = frameBuf.rIndex;
-        const apduArr = frameBuf.sliceArray(frameBuf.rIndex + 1, frameBuf.wIndex - 3);
+        const apduArr = frameBuf.sliceArray(frameBuf.rIndex, frameBuf.wIndex - 3);
         if (this.controlField.sc == 1) {
             for (let i = 0; i < apduArr.length; i++) {
                 apduArr[i] = (apduArr[i] - 0x33 + 0x100) & 0xFF;
@@ -38,7 +36,7 @@ export default class GetResponseFrame {
         this.pureApduBuf = ByteBuf.from(apduArr);
     }
     hasNextFrame() {
-        return this.framedInfo.frameType == FrameType.MID;
+        return this.controlField?.isFramed && (this.framedInfo.frameType == FrameType.MID || this.framedInfo.frameType == FrameType.START);
     }
     genRequestNextFrameBuf() {
         if (this.frameCheckResult != FrameCheckResult.OK) {
@@ -53,7 +51,6 @@ export default class GetResponseFrame {
         buf.writeBytesBE(this.addressField.frameBuf);
         const hcs = CRCUtil.crc16(buf, 1);
         buf.writeUInt16LE(hcs);
-        console.log(this.framedInfo);
         const framedInfo = new FramedInfo(FrameType.ACK, this.framedInfo.frameNumber);
         buf.writeUInt16LE(framedInfo.value);
         const fcs = CRCUtil.crc16(buf, 1);

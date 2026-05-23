@@ -10,7 +10,7 @@ export default class GetResponseRecordList {
     }
     static parse(apduBuf) {
         const piid = PIID.parse(apduBuf);
-        const len = FrameCodec.extralContentLength(apduBuf);
+        const len = FrameCodec.extraContentLength(apduBuf);
         const results = [];
         for (let i = 0; i < len; i++) {
             results.push(ResultRecord.parse(apduBuf));

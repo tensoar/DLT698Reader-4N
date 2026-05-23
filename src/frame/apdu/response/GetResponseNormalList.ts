@@ -14,7 +14,7 @@ export default class GetResponseNormalList implements IGetResponse {
 
     static parse(apduBuf: ByteBuf) {
         const piid = PIID.parse(apduBuf);
-        const seqLen = FrameCodec.extralContentLength(apduBuf);
+        const seqLen = FrameCodec.extraContentLength(apduBuf);
         const results: ResultNormal<AbsBaseDataType<any>>[] = [];
         if (seqLen > 0) {
             for (let i = 0; i < seqLen; i ++) {

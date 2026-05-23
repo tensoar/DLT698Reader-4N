@@ -6,18 +6,17 @@ const adaptor = new SerialPortAdaptor({
     baudRate: 9600,
     autoOpen: false,
 });
-const client = new DLT698Client(adaptor);
+const client = new DLT698Client(adaptor, true, 3000);
 const reader = new DLT698Reader(client);
 if (!await reader.openConnection()) {
     throw new Error(`Open connection failed ...`);
 }
 console.log(`Connection opened ...`);
 
-/** 读取地址 */
 const oadList = [
-    OAD.of(0x20, 0x01, 0x02, 0x00), // 电流
-    OAD.of(0x20, 0x04, 0x02, 0x00), // 有功功率
-    OAD.of(0x20, 0x05, 0x02, 0x00), // 有功功率
+    OAD.of(0x20, 0x01, 0x02, 0x00),
+    OAD.of(0x20, 0x04, 0x02, 0x00),
+    OAD.of(0x20, 0x05, 0x02, 0x00),
 ];
 const addressFiledWild = AddressField.WILDCARD_ADDRESS;
 
